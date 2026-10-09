@@ -6,18 +6,21 @@
       { "url": "https://feeds.bbci.co.uk/news/politics/rss.xml", "topic": "uk" },
       { "url": "https://feeds.bbci.co.uk/news/science_and_environment/rss.xml", "topic": "environment" },
       { "url": "https://feeds.bbci.co.uk/news/technology/rss.xml", "topic": "tech" },
-      { "url": "https://feeds.bbci.co.uk/sport/formula1/rss.xml", "topic": "f1" } ] },
+      { "url": "https://feeds.bbci.co.uk/sport/formula1/rss.xml", "topic": "f1" },
+      { "url": "https://feeds.bbci.co.uk/sport/football/rss.xml", "topic": "football" } ] },
     { "id": "guardian", "name": "The Guardian", "lean": -1, "factuality": "High", "owner": "Scott Trust", "feeds": [
       { "url": "https://www.theguardian.com/world/rss", "topic": "world" },
       { "url": "https://www.theguardian.com/politics/rss", "topic": "uk" },
       { "url": "https://www.theguardian.com/environment/rss", "topic": "environment" },
       { "url": "https://www.theguardian.com/technology/rss", "topic": "tech" },
-      { "url": "https://www.theguardian.com/sport/formulaone/rss", "topic": "f1" } ] },
+      { "url": "https://www.theguardian.com/sport/formulaone/rss", "topic": "f1" },
+      { "url": "https://www.theguardian.com/football/rss", "topic": "football" } ] },
     { "id": "independent", "name": "The Independent", "lean": -1, "factuality": "Mostly high", "owner": "Independent Digital News & Media", "feeds": [
       { "url": "https://www.independent.co.uk/news/world/rss", "topic": "world" },
       { "url": "https://www.independent.co.uk/news/uk/politics/rss", "topic": "uk" },
       { "url": "https://www.independent.co.uk/climate-change/rss", "topic": "environment" },
-      { "url": "https://www.independent.co.uk/tech/rss", "topic": "tech" } ] },
+      { "url": "https://www.independent.co.uk/tech/rss", "topic": "tech" },
+      { "url": "https://www.independent.co.uk/sport/football/rss", "topic": "football" } ] },
     { "id": "inews", "name": "The i Paper", "lean": 0, "factuality": "High", "owner": "Daily Mail and General Trust", "feeds": [
       { "url": "https://inews.co.uk/category/news/politics/feed", "topic": "uk" },
       { "url": "https://inews.co.uk/category/news/world/feed", "topic": "world" } ] },
@@ -27,11 +30,7 @@
       { "url": "https://feeds.skynews.com/feeds/rss/technology.xml", "topic": "tech" } ] },
     { "id": "telegraph", "name": "The Telegraph", "lean": 1, "factuality": "Mostly high", "owner": "Telegraph Media Group", "feeds": [
       { "url": "https://www.telegraph.co.uk/politics/rss.xml", "topic": "uk" },
-      { "url": "https://www.telegraph.co.uk/world-news/rss.xml", "topic": "world" },
-      { "url": "https://www.telegraph.co.uk/climate-change/rss.xml", "topic": "environment" },
-      { "url": "https://www.telegraph.co.uk/technology/rss.xml", "topic": "tech" } ] },
-    { "id": "spectator", "name": "The Spectator", "lean": 2, "factuality": "Mostly high", "owner": "Paul Marshall", "feeds": [
-      { "url": "https://www.spectator.co.uk/feed", "topic": null } ] },
+      { "url": "https://www.telegraph.co.uk/rss.xml", "topic": null } ] },
     { "id": "unherd", "name": "UnHerd", "lean": 1, "factuality": "Mostly high", "owner": "Paul Marshall", "feeds": [
       { "url": "https://unherd.com/feed/", "topic": null } ] },
     { "id": "cityam", "name": "City AM", "lean": 1, "factuality": "High", "owner": "City AM Ltd", "feeds": [
@@ -87,6 +86,43 @@
       { "url": "https://www.carbonbrief.org/feed/", "topic": "environment" } ] },
     { "id": "insideclimate", "name": "Inside Climate News", "lean": -1, "factuality": "High", "owner": "Non-profit (US)", "feeds": [
       { "url": "https://insideclimatenews.org/feed/", "topic": "environment" } ] },
+    { "id": "dailymail", "name": "Daily Mail", "lean": 2, "factuality": "Mixed", "owner": "DMG Media", "feeds": [
+      { "url": "https://www.dailymail.co.uk/news/index.rss", "topic": null },
+      { "url": "https://www.dailymail.co.uk/sport/football/index.rss", "topic": "football" } ] },
+    { "id": "express", "name": "Daily Express", "lean": 2, "factuality": "Mixed", "owner": "Reach plc", "feeds": [
+      { "url": "https://www.express.co.uk/posts/rss/1/uk", "topic": null } ] },
+    { "id": "mirror", "name": "The Mirror", "lean": -1, "factuality": "Mixed", "owner": "Reach plc", "feeds": [
+      { "url": "https://www.mirror.co.uk/news/?service=rss", "topic": null },
+      { "url": "https://www.mirror.co.uk/sport/football/?service=rss", "topic": "football" } ] },
+    { "id": "standard", "name": "Evening Standard", "lean": 0, "factuality": "Mostly high", "owner": "Evgeny Lebedev", "feeds": [
+      { "url": "https://www.standard.co.uk/news/rss", "topic": null },
+      { "url": "https://www.standard.co.uk/sport/football/rss", "topic": "football" } ] },
+    { "id": "huffpost", "name": "HuffPost UK", "lean": -2, "factuality": "Mostly high", "owner": "BuzzFeed", "feeds": [
+      { "url": "https://www.huffingtonpost.co.uk/feeds/index.xml", "topic": null } ] },
+    { "id": "politicshome", "name": "PoliticsHome", "lean": 0, "factuality": "High", "owner": "Dods Group", "feeds": [
+      { "url": "https://www.politicshome.com/news/rss", "topic": "uk" } ] },
+    { "id": "channel4", "name": "Channel 4 News", "lean": -1, "factuality": "High", "owner": "Channel 4 (public)", "feeds": [
+      { "url": "https://www.channel4.com/news/feed", "topic": null } ] },
+    { "id": "theweek", "name": "The Week", "lean": 0, "factuality": "Mostly high", "owner": "Future plc", "feeds": [
+      { "url": "https://theweek.com/feeds.xml", "topic": null } ] },
+    { "id": "euronews", "name": "Euronews", "lean": 0, "factuality": "Mostly high", "owner": "Alpac Capital", "feeds": [
+      { "url": "https://www.euronews.com/rss?level=theme&name=news", "topic": null } ] },
+    { "id": "wapo", "name": "The Washington Post", "lean": -1, "factuality": "High", "owner": "Nash Holdings (Jeff Bezos)", "feeds": [
+      { "url": "https://feeds.washingtonpost.com/rss/world", "topic": "world" } ] },
+    { "id": "cbs", "name": "CBS News", "lean": -1, "factuality": "High", "owner": "Paramount Skydance", "feeds": [
+      { "url": "https://www.cbsnews.com/latest/rss/world", "topic": "world" } ] },
+    { "id": "abc", "name": "ABC News", "lean": -1, "factuality": "High", "owner": "Disney", "feeds": [
+      { "url": "https://abcnews.go.com/abcnews/internationalheadlines", "topic": "world" } ] },
+    { "id": "thehill", "name": "The Hill", "lean": 0, "factuality": "Mostly high", "owner": "Nexstar Media", "feeds": [
+      { "url": "https://thehill.com/feed/", "topic": null } ] },
+    { "id": "bloomberg", "name": "Bloomberg", "lean": -1, "factuality": "High", "owner": "Bloomberg LP", "feeds": [
+      { "url": "https://feeds.bloomberg.com/politics/news.rss", "topic": null } ] },
+    { "id": "axios", "name": "Axios", "lean": -1, "factuality": "High", "owner": "Cox Enterprises", "feeds": [
+      { "url": "https://api.axios.com/feed/", "topic": null } ] },
+    { "id": "nypost", "name": "New York Post", "lean": 1, "factuality": "Mixed", "owner": "News Corp", "feeds": [
+      { "url": "https://nypost.com/feed/", "topic": null } ] },
+    { "id": "washex", "name": "Washington Examiner", "lean": 2, "factuality": "Mixed", "owner": "Clarity Media Group", "feeds": [
+      { "url": "https://www.washingtonexaminer.com/feed", "topic": null } ] },
     { "id": "skysportsf1", "name": "Sky Sports F1", "lean": null, "factuality": "High", "owner": "Comcast", "feeds": [
       { "url": "https://www.skysports.com/rss/12433", "topic": "f1" } ] },
     { "id": "autosport", "name": "Autosport", "lean": null, "factuality": "High", "owner": "Motorsport Network", "feeds": [
@@ -96,6 +132,10 @@
     { "id": "therace", "name": "The Race", "lean": null, "factuality": "High", "owner": "The Race Media", "feeds": [
       { "url": "https://www.the-race.com/feed/", "topic": "f1" } ] },
     { "id": "racefans", "name": "RaceFans", "lean": null, "factuality": "High", "owner": "Independent", "feeds": [
-      { "url": "https://www.racefans.net/feed/", "topic": "f1" } ] }
+      { "url": "https://www.racefans.net/feed/", "topic": "f1" } ] },
+    { "id": "espn", "name": "ESPN FC", "lean": null, "factuality": "High", "owner": "Disney", "feeds": [
+      { "url": "https://www.espn.com/espn/rss/soccer/news", "topic": "football" } ] },
+    { "id": "thesun", "name": "The Sun", "lean": 2, "factuality": "Mixed", "owner": "News UK", "feeds": [
+      { "url": "https://www.thesun.co.uk/sport/football/feed/", "topic": "football" } ] }
   ]
 }

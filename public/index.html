@@ -212,6 +212,17 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--r
       </select>
     </section>
     <section>
+      <h3>Football spoiler shield</h3>
+      <p>Football headlines that look like a result (a score, "beat", "late winner", player ratings and so on) are hidden until you tap "I'm caught up", or once they are older than this.</p>
+      <label for="fbLiftSel">Show results again</label>
+      <select id="fbLiftSel">
+        <option value="12">12 hours after they're published</option>
+        <option value="24">24 hours after they're published</option>
+        <option value="48">48 hours after they're published</option>
+        <option value="0">Only when I tap "I'm caught up"</option>
+      </select>
+    </section>
+    <section>
       <h3>Muted words</h3>
       <p>Stories whose headlines contain any of these words are hidden. One per line or comma separated.</p>
       <textarea id="mutes" placeholder="e.g. royal, transfer"></textarea>
@@ -239,9 +250,10 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--r
     { id: 'environment', label: 'Environment' },
     { id: 'tech', label: 'Technology' },
     { id: 'f1', label: 'F1' },
+    { id: 'football', label: 'Football' },
     { id: 'saved', label: 'Saved' },
   ];
-  const TOPIC_LABEL = { world: 'World', uk: 'UK politics', environment: 'Environment', tech: 'Technology', f1: 'Formula 1' };
+  const TOPIC_LABEL = { world: 'World', uk: 'UK politics', environment: 'Environment', tech: 'Technology', f1: 'Formula 1', football: 'Football' };
   const LEAN_NAME = { '-2': 'Left', '-1': 'Lean left', '0': 'Centre', '1': 'Lean right', '2': 'Right' };
   const leanGroup = (l) => (l == null ? 'unrated' : l < 0 ? 'left' : l > 0 ? 'right' : 'centre');
   const F1_RE = /\b(f1|formula (1|one)|grand prix)\b/i;
@@ -257,6 +269,8 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--r
     blindOnly: false,
     shield: store.get('shield', true),
     liftHours: store.get('liftHours', 36),
+    fbLiftHours: store.get('fbLiftHours', 24),
+    fbSeen: store.get('fbSeen', null),
     watched: store.get('watched', {}),
     revealed: new Set(),
     mutes: store.get('mutes', []),
@@ -309,10 +323,31 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--r
     return null;
   }
   const isF1Story = (s) => s.topic === 'f1' || s.articles.some((a) => F1_RE.test(a.title));
+  const isFootballStory = (s) => s.topic === 'football';
+  const isSportStory = (s) => isF1Story(s) || isFootballStory(s);
+
+  // ---------- football spoiler shield ----------
+  // No fixture list, so this works on the headline itself: anything that reads like a result,
+  // published after you last caught up and within the delay you chose, stays hidden.
+  let fbSpoilerRe = null;
+  const FOOTBALL = { id: 'football', kind: 'football' };
+  function isFootballSpoiler(article) {
+    const t = +new Date(article.published);
+    if (state.fbSeen && t <= +new Date(state.fbSeen)) return false;
+    if (state.fbLiftHours > 0 && Date.now() - t > state.fbLiftHours * 3.6e6) return false;
+    return fbSpoilerRe.test(`${article.title} ${article.summary || ''}`);
+  }
 
   // Splits a story's articles into safe and hidden ones under the current shield.
   function shielded(story) {
-    if (!isF1Story(story) || state.revealed.has(story.id)) return { story, hidden: 0, race: null };
+    if (state.revealed.has(story.id) || !state.shield) return { story, hidden: 0, race: null };
+    if (isFootballStory(story)) {
+      const safe = story.articles.filter((a) => !isFootballSpoiler(a));
+      if (safe.length === story.articles.length) return { story, hidden: 0, race: null };
+      if (!safe.length) return { story: null, hidden: story.articles.length, race: FOOTBALL, id: story.id };
+      return { story: { ...story, articles: safe, title: safe[0].title, summary: safe[0].summary }, hidden: story.articles.length - safe.length, race: FOOTBALL };
+    }
+    if (!isF1Story(story)) return { story, hidden: 0, race: null };
     const windows = activeWindows();
     if (!windows.length || !state.shield) return { story, hidden: 0, race: null };
     let race = null;
@@ -340,7 +375,8 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--r
     if (tab === 'saved') return list.filter((s) => state.saved.has(s.id));
     list = list.filter((s) => !state.dismissed.has(s.id));
     if (tab === 'f1') return list.filter(isF1Story).sort((a, b) => new Date(b.updated) - new Date(a.updated));
-    list = list.filter((s) => !isF1Story(s) && s.articles.length >= state.minOutlets);
+    if (tab === 'football') return list.filter((s) => isFootballStory(s) && !isF1Story(s));
+    list = list.filter((s) => !isSportStory(s) && s.articles.length >= state.minOutlets);
     if (tab !== 'top') list = list.filter((s) => s.topic === tab);
     if (state.blindOnly) list = list.filter((s) => s.blindspot);
     if (state.q) { const q = state.q.toLowerCase(); list = list.filter((s) => s.articles.some((a) => a.title.toLowerCase().includes(q) || (a.summary || '').toLowerCase().includes(q))); }
@@ -362,7 +398,7 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--r
   }
 
   function storyCard(s, i, hiddenCount) {
-    const lead = i === 0 && state.tab !== 'f1' && state.tab !== 'saved';
+    const lead = i === 0 && !['f1', 'football', 'saved'].includes(state.tab);
     const isNew = state.lastVisit && new Date(s.first) > new Date(state.lastVisit);
     const blind = s.blindspot ? `<span class="blind">Blindspot: little ${s.blindspot === 'left' ? 'left-leaning' : 'right-leaning'} coverage</span>` : '';
     const outlets = s.articles.map((a) => {
@@ -381,7 +417,7 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--r
       </div>
       <h3><a href="${esc(first.link)}" target="_blank" rel="noopener" data-read="${esc(first.source)}">${esc(s.title)}</a></h3>
       ${s.summary ? `<p class="sum">${esc(s.summary)}</p>` : ''}
-      ${s.topic === 'f1' ? '' : leanBar(s.lean)}
+      ${s.topic === 'f1' || s.topic === 'football' ? '' : leanBar(s.lean)}
       <div class="outlets">${outlets}</div>
       ${hiddenCount ? `<div class="meta">${hiddenCount} report${hiddenCount === 1 ? '' : 's'} hidden by the spoiler shield</div>` : ''}
       <div class="actions">
@@ -403,7 +439,7 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--r
       const src = data.sources[a.source];
       return `<li><small>${esc(src?.name)} · ${esc(LEAN_NAME[src?.lean] ?? 'Specialist')} · ${ago(a.published)}</small><a href="${esc(a.link)}" target="_blank" rel="noopener" data-read="${esc(a.source)}">${esc(a.title)}</a></li>`;
     }).join('')}</ul>` : '<p class="empty">No coverage from this side</p>'}</div>`;
-    if (s.topic === 'f1') return `<div class="compare" style="grid-template-columns:minmax(0,1fr)"><div><h4>All coverage</h4><ul>${s.articles.map((a) => `<li><small>${esc(data.sources[a.source]?.name)} · ${ago(a.published)}</small><a href="${esc(a.link)}" target="_blank" rel="noopener">${esc(a.title)}</a></li>`).join('')}</ul></div></div>`;
+    if (s.topic === 'f1' || s.topic === 'football') return `<div class="compare" style="grid-template-columns:minmax(0,1fr)"><div><h4>All coverage</h4><ul>${s.articles.map((a) => `<li><small>${esc(data.sources[a.source]?.name)} · ${ago(a.published)}</small><a href="${esc(a.link)}" target="_blank" rel="noopener">${esc(a.title)}</a></li>`).join('')}</ul></div></div>`;
     return `<div class="compare">${col('left', 'Left')}${col('centre', 'Centre')}${col('right', 'Right')}</div>`;
   }
 
@@ -426,12 +462,17 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--r
       out.push(storyCard(r.story, shown++, r.hidden).replace('<article ', `<article id="s-${s.id}" `));
     }
     for (const { race, n, ids } of hiddenRaces.values()) {
+      if (race.kind === 'football') {
+        out.unshift(`<div class="hidden-note"><span><b>${n} football stor${n === 1 ? 'y' : 'ies'} hidden</b> because the headlines may give away a result.</span><span class="actions"><button class="btn" type="button" data-caughtup="1">I'm caught up</button><button class="act" type="button" data-reveal="${ids.join(',')}">Show anyway</button></span></div>`);
+        continue;
+      }
       out.unshift(`<div class="hidden-note"><span><b>${n} F1 stor${n === 1 ? 'y' : 'ies'} hidden</b> until you've watched the ${esc(race.name)}.</span><span class="actions"><button class="btn" type="button" data-watched="${race.id}">I've watched it</button><button class="act" type="button" data-reveal="${ids.join(',')}">Show anyway</button></span></div>`);
     }
     if (!shown && !hiddenRaces.size) {
       const msg = state.tab === 'saved' ? 'Nothing saved yet. Use Save on any story to keep it here.'
         : state.q ? `No stories match “${esc(state.q)}”.`
         : state.tab === 'f1' ? 'No F1 news in the last week.'
+        : state.tab === 'football' ? 'No football news in the last three days.'
         : `No stories are covered by ${state.minOutlets}+ outlets right now. <button class="act" type="button" data-size="2">Show smaller stories</button>`;
       out.push(`<div class="empty-state">${msg}</div>`);
     }
@@ -443,7 +484,7 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--r
       const n = t.id === 'saved' ? state.saved.size : t.id === 'top' ? null : storiesFor(t.id).length;
       return `<button class="tab" role="tab" type="button" data-tab="${t.id}" aria-selected="${state.tab === t.id}">${t.label}${n != null ? `<span class="n">${n}</span>` : ''}</button>`;
     }).join('');
-    const news = state.tab !== 'f1' && state.tab !== 'saved';
+    const news = !['f1', 'football', 'saved'].includes(state.tab);
     for (const sel of ['#sizeLbl', '#size', '#blindOnly']) $(sel).hidden = !news;
   }
 
@@ -456,7 +497,9 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--r
     const windows = activeWindows();
     const btn = $('#shieldBtn');
     btn.setAttribute('aria-pressed', state.shield);
-    $('#shieldTxt').textContent = !state.shield ? 'Spoiler shield off' : windows.length ? `Shield on · ${windows[0].short} results hidden` : 'Spoiler shield on';
+    $('#shieldTxt').textContent = !state.shield ? 'Spoiler shield off'
+      : state.tab === 'football' ? 'Shield on · recent results hidden'
+      : windows.length ? `Shield on · ${windows[0].short} results hidden` : 'Spoiler shield on';
   }
 
   function f1Panel() {
@@ -485,7 +528,7 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--r
   }
 
   function blindPanel() {
-    const all = data.stories.map(recount).filter((s) => s.blindspot && !isF1Story(s) && !state.dismissed.has(s.id)).slice(0, 4);
+    const all = data.stories.map(recount).filter((s) => s.blindspot && !isSportStory(s) && !state.dismissed.has(s.id)).slice(0, 4);
     if (!all.length) return '';
     return `<section class="panel" aria-label="Blindspots"><h2>Blindspots</h2><p class="balance-note" style="margin:0 0 10px">Stories one side of the spectrum is barely covering.</p><ul class="list">${all.map((s) => `<li><a href="#s-${s.id}" data-jump="${s.id}" data-topic="${s.topic}">${esc(s.title)}</a><small>Missed by ${s.blindspot === 'left' ? 'left-leaning' : 'right-leaning'} outlets · ${s.articles.length} outlets</small>${leanBar(s.lean, true)}</li>`).join('')}</ul></section>`;
   }
@@ -508,7 +551,7 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--r
 
   function renderBanner() {
     const msgs = [];
-    if (data.sample) msgs.push('<b>Preview with sample stories.</b> These headlines are made up to show the layout and are not real news. Once the app runs on a server with internet access it pulls live feeds from 34 outlets every 30 minutes.');
+    if (data.sample) msgs.push(`<b>Preview with sample stories.</b> These headlines are made up to show the layout and are not real news. Once the app runs on a server with internet access it pulls live feeds from ${Object.keys(data.sources).length} outlets every 30 minutes.`);
     const failed = (data.feeds || []).filter((f) => !f.ok).length;
     if (!data.sample && failed) msgs.push(`${failed} of ${data.feeds.length} feeds could not be reached on the last update.`);
     $('#banner').innerHTML = msgs.map((m) => `<div class="banner">${m}</div>`).join('');
@@ -517,6 +560,7 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--r
 
   function renderSettings() {
     $('#liftSel').value = String(state.liftHours);
+    $('#fbLiftSel').value = String(state.fbLiftHours);
     $('#mutes').value = state.mutes.join(', ');
     $('#srcRows').innerHTML = Object.entries(data.sources).sort((a, b) => (a[1].lean ?? 9) - (b[1].lean ?? 9)).map(([id, s]) => `<tr><td><input type="checkbox" id="src-${id}" data-src="${id}" ${state.disabled.has(id) ? '' : 'checked'} aria-label="Show ${esc(s.name)}"></td><td>${esc(s.name)}</td><td><i class="sw" style="background:var(--${leanGroup(s.lean)})"></i>${esc(LEAN_NAME[s.lean] ?? 'Specialist')}</td><td>${esc(s.factuality)}</td><td>${esc(s.owner)}</td></tr>`).join('');
   }
@@ -525,11 +569,12 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--r
 
   // ---------- events ----------
   document.addEventListener('click', (e) => {
-    const t = e.target.closest('[data-tab],[data-size],[data-act],[data-watched],[data-unwatch],[data-reveal],[data-jump],[data-read]');
+    const t = e.target.closest('[data-tab],[data-size],[data-act],[data-caughtup],[data-watched],[data-unwatch],[data-reveal],[data-jump],[data-read]');
     if (!t) return;
     if (t.dataset.tab) { state.tab = t.dataset.tab; store.set('tab', state.tab); history.replaceState(null, '', '#' + state.tab); render(); window.scrollTo({ top: 0 }); return; }
     if (t.dataset.size) { state.minOutlets = +t.dataset.size; store.set('minOutlets', state.minOutlets); render(); return; }
     if (t.dataset.watched) { state.watched[t.dataset.watched] = new Date().toISOString(); store.set('watched', state.watched); render(); return; }
+    if (t.dataset.caughtup) { state.fbSeen = new Date().toISOString(); store.set('fbSeen', state.fbSeen); render(); return; }
     if (t.dataset.unwatch) { delete state.watched[t.dataset.unwatch]; store.set('watched', state.watched); render(); return; }
     if (t.dataset.reveal) { t.dataset.reveal.split(',').forEach((id) => state.revealed.add(id)); render(); return; }
     if (t.dataset.jump) {
@@ -553,6 +598,7 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--r
   $('#q').addEventListener('input', (e) => { clearTimeout(qTimer); qTimer = setTimeout(() => { state.q = e.target.value.trim(); renderFeed(); }, 150); });
   $('#openSettings').addEventListener('click', () => { renderSettings(); $('#settings').showModal(); });
   $('#liftSel').addEventListener('change', (e) => { state.liftHours = +e.target.value; store.set('liftHours', state.liftHours); render(); });
+  $('#fbLiftSel').addEventListener('change', (e) => { state.fbLiftHours = +e.target.value; store.set('fbLiftHours', state.fbLiftHours); render(); });
   $('#mutes').addEventListener('change', (e) => { state.mutes = e.target.value.split(/[,\n]/).map((s) => s.trim().toLowerCase()).filter(Boolean); store.set('mutes', state.mutes); render(); });
   $('#srcRows').addEventListener('change', (e) => { const id = e.target.dataset.src; if (!id) return; e.target.checked ? state.disabled.delete(id) : state.disabled.add(id); store.set('disabled', [...state.disabled]); render(); });
   $('#resetHistory').addEventListener('click', () => { state.reads = []; store.set('reads', []); renderRail(); });
@@ -566,6 +612,8 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--r
       const next = await res.json();
       const esc2 = (w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       spoilerRe = new RegExp(`\\b(${next.f1.spoilerWords.map(esc2).join('|')})\\b`, 'i');
+      // A scoreline like "2-1" or "3–0" counts as a result too.
+      fbSpoilerRe = new RegExp(`\\b(${(next.football?.spoilerWords || []).map(esc2).join('|') || '(?!)'})\\b|\\b\\d{1,2}\\s?[-–]\\s?\\d{1,2}\\b`, 'i');
       data = next;
       render();
     } catch (err) {

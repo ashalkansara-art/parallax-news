@@ -19,7 +19,7 @@ const NEWS_MAX_AGE_H = 72;
 const F1_MAX_AGE_H = 24 * 7;
 const JOIN_THRESHOLD = 0.3;    // similarity to a story's centre needed to join it
 const LINK_THRESHOLD = 0.45;   // ...or to any single article already in it
-const MERGE_THRESHOLD = 0.4;   // similarity between two stories' centres to merge them
+const MERGE_THRESHOLD = 0.5;   // similarity between two stories' centres to merge them
 const MIN_SHARED = 2;          // headline words or names an article must share with a story
 const SAME_SOURCE_PENALTY = 0.08;
 const SUMMARY_WORDS = 40;
@@ -110,7 +110,7 @@ function tokens(item) {
 
 // Headline words for the "do these share enough?" check. A run of capitalised words
 // ("Elon Musk", "Nobel Peace Prize") counts as one name, so a single shared name isn't enough.
-const GENERIC = new Set('f1 gp grand prix formula race uk us bbc'.split(' '));
+const GENERIC = new Set('f1 gp grand prix formula race football fc league premier cup uk us bbc'.split(' '));
 function titleUnits(title) {
   const word = (r) => stem(norm(r).replace(/[^a-z0-9]/g, ''));
   const keep = (w) => w.length >= 2 && !STOP.has(w) && !GENERIC.has(w);
@@ -140,6 +140,9 @@ function cosine(a, b) {
   return na && nb ? dot / Math.sqrt(na * nb) : 0;
 }
 
+// Sport stays in its own section: an F1 or football article never joins a news story.
+const desk = (topic) => (topic === 'f1' || topic === 'football' ? topic : 'news');
+
 const hash = (s) => createHash('sha1').update(s).digest('hex').slice(0, 10);
 
 // ---------- pipeline ----------
@@ -147,9 +150,10 @@ const hash = (s) => createHash('sha1').update(s).digest('hex').slice(0, 10);
 function classify(item, feedTopic, filters) {
   const text = norm(`${item.title} ${item.summary}`);
   if (phraseRe(filters.block).test(text)) return null;
-  if (feedTopic === 'f1') return 'f1';
+  if (feedTopic === 'f1' || feedTopic === 'football') return feedTopic;
   const scores = Object.fromEntries(Object.entries(filters.topics).map(([t, kw]) => [t, countMatches(text, kw)]));
   if (scores.f1 >= 2 && phraseRe(['formula 1', 'formula one', 'f1', 'grand prix']).test(text)) return 'f1';
+  if (scores.football >= 2 && phraseRe(['football', 'premier league', 'champions league', 'fa cup']).test(text)) return 'football';
   if (feedTopic) return feedTopic === 'world' && scores.uk >= 3 && scores.uk > scores.world ? 'uk' : feedTopic;
   const order = ['uk', 'environment', 'tech', 'world'];
   const best = order.reduce((a, b) => (scores[b] > scores[a] ? b : a));
@@ -167,7 +171,7 @@ function cluster(items) {
   for (const it of [...items].sort((a, b) => a.published - b.published)) {
     let best = null, bestSim = 0;
     for (const c of clusters) {
-      if ((it.topic === 'f1') !== (c.topic === 'f1')) continue;
+      if (desk(it.topic) !== desk(c.topic)) continue;
       if (it.published - c.latest > JOIN_WINDOW_H * 3.6e6) continue;
       const link = Math.max(...c.items.map((o) => cosine(it.vec, o.vec)));
       let sim = Math.max(cosine(it.vec, c.centroid), link >= LINK_THRESHOLD ? link : 0);
@@ -192,7 +196,7 @@ function cluster(items) {
     merged = false;
     for (let i = 0; i < clusters.length && !merged; i++) for (let j = i + 1; j < clusters.length && !merged; j++) {
       const a = clusters[i], b = clusters[j];
-      if ((a.topic === 'f1') !== (b.topic === 'f1')) continue;
+      if (desk(a.topic) !== desk(b.topic)) continue;
       if (cosine(a.centroid, b.centroid) < MERGE_THRESHOLD) continue;
       const small = a.items.length <= b.items.length ? a : b, big = small === a ? b : a;
       const keys = new Set(small.items.flatMap((it) => it.units.filter((u) => u.some((w) => big.titleWords.has(w))).map((u) => u.join(' '))));
@@ -227,7 +231,7 @@ function toStory(c, sourcesById, now) {
   }
   const rated = lean.left + lean.centre + lean.right;
   let blindspot = null;
-  if (topic !== 'f1' && rated >= 3) {
+  if (desk(topic) === 'news' && rated >= 3) {
     if (lean.left / rated <= 0.15 && lean.right / rated >= 0.5) blindspot = 'left';
     if (lean.right / rated <= 0.15 && lean.left / rated >= 0.5) blindspot = 'right';
   }
@@ -300,6 +304,7 @@ async function main() {
     sample: Boolean(fixture),
     sources: Object.fromEntries(sources.map(({ id, name, lean, factuality, owner }) => [id, { name, lean, factuality, owner }])),
     f1: { calendar: calendar.races, spoilerWords: filters.f1Spoiler },
+    football: { spoilerWords: filters.footballSpoiler },
     stories,
     feeds: feedStatus,
   };
