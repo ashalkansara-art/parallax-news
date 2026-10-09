@@ -95,6 +95,10 @@ button { cursor: pointer }
 .brief a { font-family: var(--display); font-size: 18px; line-height: 1.25; text-decoration: none; font-weight: 500 }
 .brief a:hover { text-decoration: underline }
 .brief .mini { width: 56px }
+.brief-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap }
+.brief-head h2 { margin: 0 }
+.brief li small { display: block; font-family: var(--body); font-size: 12px; color: var(--muted); margin-top: 2px }
+.brief .none { color: var(--muted); font-size: 14px; margin: 0 }
 
 /* Story card */
 .story { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px 18px; display: grid; gap: 10px }
@@ -283,6 +287,7 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--r
     saved: new Set(store.get('saved', [])),
     dismissed: new Set(store.get('dismissed', [])),
     reads: store.get('reads', []),
+    briefSpan: store.get('briefSpan', 'day'),
     lastVisit: store.get('lastVisit', null),
     open: new Set(),
     q: '',
@@ -448,10 +453,48 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--r
     return `<div class="compare">${col('left', 'Left')}${col('centre', 'Centre')}${col('right', 'Right')}</div>`;
   }
 
-  function briefing(list) {
-    const top = list.slice(0, 5);
-    if (top.length < 3) return '';
-    return `<section class="brief" aria-label="Briefing"><h2>Briefing · the ${top.length} biggest stories right now</h2><ol>${top.map((s) => `<li><a href="#s-${s.id}" data-jump="${s.id}">${esc(s.title)}</a><span class="mini">${leanBar(s.lean, true)}</span></li>`).join('')}</ol></section>`;
+  // ---------- top stories of the day and week ----------
+  const inTab = (topic, tab) => (tab === 'top' ? !['f1', 'football'].includes(topic) : topic === tab);
+  const muted = (title) => state.mutes.some((m) => m && title.toLowerCase().includes(m));
+
+  function topToday(tab) {
+    return data.stories.map(recount)
+      .filter((s) => inTab(s.topic, tab) && s.articles.length >= 2 && Date.now() - new Date(s.updated) < 864e5 && !state.dismissed.has(s.id) && !muted(s.title))
+      .sort((a, b) => b.articles.length - a.articles.length || b.score - a.score)
+      .map((s) => ({ story: shielded(s).story, s }))
+      .filter((r) => r.story)
+      .slice(0, 5)
+      .map(({ story, s }) => ({ id: s.id, title: story.title, link: story.articles[0].link, source: story.articles[0].source, outlets: s.articles.length, lean: s.lean, topic: s.topic, when: s.updated }));
+  }
+
+  function topWeek(tab) {
+    return (data.week || [])
+      .filter((e) => inTab(e.topic, tab) && !state.dismissed.has(e.id) && !muted(e.title))
+      .sort((a, b) => b.peak - a.peak || new Date(b.updated) - new Date(a.updated))
+      // Sport headlines from the week go through the same spoiler shields as the feed.
+      .filter((e) => shielded({ id: e.id, topic: e.topic, articles: [{ title: e.title, summary: '', published: e.updated, source: e.source }] }).story)
+      .slice(0, 5)
+      .map((e) => ({ id: e.id, title: e.title, link: e.link, source: e.source, outlets: e.peak, lean: e.lean, topic: e.topic, when: e.first }));
+  }
+
+  function briefing(tab) {
+    const span = state.briefSpan;
+    const rows = span === 'week' ? topWeek(tab) : topToday(tab);
+    const heading = tab === 'top' ? 'Top stories' : `Top in ${TOPICS.find((t) => t.id === tab)?.label || tab}`;
+    const sport = tab === 'f1' || tab === 'football';
+    const item = (r) => {
+      const here = data.stories.some((s) => s.id === r.id);
+      const href = here ? `#s-${r.id}` : r.link;
+      const attrs = here ? `data-jump="${r.id}" data-topic="${r.topic}"` : `target="_blank" rel="noopener" data-read="${esc(r.source)}"`;
+      const when = span === 'week' ? `first seen ${ago(r.when)}` : `updated ${ago(r.when)}`;
+      return `<li><span><a href="${esc(href)}" ${attrs}>${esc(r.title)}</a><small>${r.outlets} outlets · ${when}</small></span>${sport ? '<span></span>' : `<span class="mini">${leanBar(r.lean, true)}</span>`}</li>`;
+    };
+    return `<section class="brief" aria-label="${esc(heading)}">
+      <div class="brief-head"><h2>${esc(heading)}</h2>
+        <div class="seg" role="group" aria-label="Time span"><button type="button" data-span="day" aria-pressed="${span === 'day'}">Today</button><button type="button" data-span="week" aria-pressed="${span === 'week'}">This week</button></div>
+      </div>
+      ${rows.length ? `<ol>${rows.map(item).join('')}</ol>` : `<p class="none">${span === 'week' ? 'Nothing big here this week yet.' : 'No story here has been picked up by 2+ outlets today.'}</p>`}
+    </section>`;
   }
 
   function renderFeed() {
@@ -459,7 +502,7 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--r
     let list = storiesFor(state.tab);
     const hiddenRaces = new Map();
     const out = [];
-    if (state.tab === 'top' && !state.q && !state.blindOnly) out.push(briefing(list));
+    if (state.tab !== 'saved' && !state.q && !state.blindOnly) out.push(briefing(state.tab));
     let shown = 0;
     for (const s of list) {
       const r = shielded(s);
@@ -574,8 +617,9 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--r
 
   // ---------- events ----------
   document.addEventListener('click', (e) => {
-    const t = e.target.closest('[data-tab],[data-size],[data-act],[data-caughtup],[data-watched],[data-unwatch],[data-reveal],[data-jump],[data-read]');
+    const t = e.target.closest('[data-span],[data-tab],[data-size],[data-act],[data-caughtup],[data-watched],[data-unwatch],[data-reveal],[data-jump],[data-read]');
     if (!t) return;
+    if (t.dataset.span) { state.briefSpan = t.dataset.span; store.set('briefSpan', state.briefSpan); renderFeed(); return; }
     if (t.dataset.tab) { state.tab = t.dataset.tab; store.set('tab', state.tab); history.replaceState(null, '', '#' + state.tab); render(); window.scrollTo({ top: 0 }); return; }
     if (t.dataset.size) { state.minOutlets = +t.dataset.size; store.set('minOutlets', state.minOutlets); render(); return; }
     if (t.dataset.watched) { state.watched[t.dataset.watched] = new Date().toISOString(); store.set('watched', state.watched); render(); return; }

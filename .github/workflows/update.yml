@@ -24,7 +24,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: node scripts/build.mjs
+      # The live site's last data.json carries the week of top stories forward.
+      - run: SITE_URL="https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/" node scripts/build.mjs
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public

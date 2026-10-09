@@ -25,6 +25,8 @@ const SAME_SOURCE_PENALTY = 0.08;
 const SUMMARY_WORDS = 40;
 const SUMMARY_WEIGHT = 0.4;
 const JOIN_WINDOW_H = 48;
+const WEEK_H = 24 * 7;
+const WEEK_PER_TOPIC = 40;
 
 // ---------- feed parsing ----------
 
@@ -261,6 +263,61 @@ function toStory(c, sourcesById, now) {
   };
 }
 
+// ---------- a week of top stories ----------
+// Feeds only reach back a day or three, so each update carries the week forward: it reads the
+// previous data.json (from the live site in CI, from disk locally) and folds today's stories in.
+
+async function previousWeek() {
+  try {
+    if (process.env.SITE_URL) {
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          const res = await fetch(new URL('data.json', process.env.SITE_URL), { headers: { 'cache-control': 'no-cache' } });
+          if (res.status === 404) return [];
+          if (res.ok) return (await res.json()).week ?? [];
+        } catch {}
+        await new Promise((r) => setTimeout(r, 3000));
+      }
+      console.warn('Could not read last week from the live site; starting the week afresh.');
+      return [];
+    }
+    return JSON.parse(await readFile(path.join(ROOT, 'public/data.json'), 'utf8')).week ?? [];
+  } catch {
+    return [];
+  }
+}
+
+function foldWeek(prev, stories, now) {
+  const week = prev.filter((e) => now - new Date(e.updated) < WEEK_H * 3.6e6);
+  const byLink = new Map();
+  for (const e of week) for (const l of e.links) byLink.set(l, e);
+  for (const s of stories) {
+    if (s.articles.length < 2) continue;
+    const links = s.articles.map((a) => a.link);
+    const lead = s.articles.find((a) => a.title === s.title) ?? s.articles[0];
+    const snap = { id: s.id, topic: s.topic, title: s.title, link: lead.link, source: lead.source, outlets: s.articles.length, lean: s.lean, first: s.first, updated: s.updated };
+    const e = links.map((l) => byLink.get(l)).find(Boolean);
+    if (!e) {
+      const fresh = { ...snap, peak: snap.outlets, links: links.slice(0, 20) };
+      week.push(fresh);
+      for (const l of fresh.links) byLink.set(l, fresh);
+      continue;
+    }
+    // Keep the headline from the moment the story was biggest.
+    if (snap.outlets >= e.peak) Object.assign(e, { id: snap.id, topic: snap.topic, title: snap.title, link: snap.link, source: snap.source, lean: snap.lean, peak: snap.outlets });
+    e.outlets = snap.outlets;
+    e.first = e.first < snap.first ? e.first : snap.first;
+    e.updated = e.updated > snap.updated ? e.updated : snap.updated;
+    e.links = [...new Set([...e.links, ...links])].slice(0, 20);
+    for (const l of e.links) byLink.set(l, e);
+  }
+  const keep = [];
+  for (const topic of new Set(week.map((e) => e.topic))) {
+    keep.push(...week.filter((e) => e.topic === topic).sort((a, b) => b.peak - a.peak || b.updated.localeCompare(a.updated)).slice(0, WEEK_PER_TOPIC));
+  }
+  return keep;
+}
+
 async function main() {
   const fixtureArg = process.argv.indexOf('--fixture');
   const fixture = fixtureArg > -1 ? process.argv[fixtureArg + 1] : null;
@@ -306,6 +363,7 @@ async function main() {
   }
 
   const stories = cluster(items).map((c) => toStory(c, sourcesById, now)).sort((a, b) => b.score - a.score);
+  const week = foldWeek(fixture ? [] : await previousWeek(), stories, now);
 
   const out = {
     generatedAt: new Date(now).toISOString(),
@@ -314,6 +372,7 @@ async function main() {
     f1: { calendar: calendar.races, spoilerWords: filters.f1Spoiler },
     football: { spoilerWords: filters.footballSpoiler },
     stories,
+    week,
     feeds: feedStatus,
   };
   await mkdir(path.join(ROOT, 'public'), { recursive: true });
@@ -321,7 +380,7 @@ async function main() {
   const ok = feedStatus.filter((f) => f.ok).length;
   console.log(`${stories.length} stories from ${items.length} articles` + (fixture ? ' (sample)' : `; ${ok}/${feedStatus.length} feeds ok`));
   const multi = stories.filter((s) => s.articles.length > 1);
-  console.log(`${multi.length} stories covered by 2+ outlets`);
+  console.log(`${multi.length} stories covered by 2+ outlets; ${week.length} in this week's top stories`);
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });

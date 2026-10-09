@@ -9,7 +9,7 @@ A personal news reader in the spirit of Ground News. It reads RSS feeds from 63 
 - **Blindspots.** Stories that one side of the spectrum is barely covering get a badge and their own panel.
 - **Only your topics.** World, UK politics, US politics, India, business, environment, science, health, technology, F1 and football. Celebrity, showbiz, royal gossip, shopping deals and other sports are filtered out (`config/filters.json`).
 - **No minor stories.** The "covered by at least" control (default 3 outlets) hides stories few outlets picked up.
-- **Briefing.** The five biggest stories right now, at the top of Top stories.
+- **Top today and this week.** Every tab opens with its five biggest stories of the day, or of the past seven days. Each update reads the live site's previous `data.json` to carry the week forward, since feeds only reach back a few days.
 - **F1 spoiler shield.** From the first competitive session of a race weekend (sprint qualifying or qualifying), F1 headlines that could give away a result are hidden. Build-up news and non-race news (contracts, calendar) still show. Results come back when you tap "I've watched it", or automatically after a delay you choose (default 36 hours after lights out). The F1 desk shows the next race, a countdown and session times in your time zone.
 - **Football spoiler shield.** Football headlines that read like a result (a scoreline, "beat", "late winner", player ratings) are hidden until you tap "I'm caught up", or once they're older than a delay you choose (default 24 hours). Transfer news, injuries and previews still show.
 - **Your reading balance.** Tracks which side of the spectrum the articles you open come from.
