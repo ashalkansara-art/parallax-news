@@ -154,8 +154,14 @@ function classify(item, feedTopic, filters) {
   const scores = Object.fromEntries(Object.entries(filters.topics).map(([t, kw]) => [t, countMatches(text, kw)]));
   if (scores.f1 >= 2 && phraseRe(['formula 1', 'formula one', 'f1', 'grand prix']).test(text)) return 'f1';
   if (scores.football >= 2 && phraseRe(['football', 'premier league', 'champions league', 'fa cup']).test(text)) return 'football';
-  if (feedTopic) return feedTopic === 'world' && scores.uk >= 3 && scores.uk > scores.world ? 'uk' : feedTopic;
-  const order = ['uk', 'environment', 'tech', 'world'];
+  if (feedTopic === 'world') {
+    // World feeds carry a lot of British and American politics; move those to their own tabs.
+    if (scores.uk >= 3 && scores.uk > scores.world) return 'uk';
+    if (scores.us >= 3 && scores.us > scores.world) return 'us';
+  }
+  // Section feeds for the newer topics also run general stories, so they need a keyword match too.
+  if (feedTopic && !(['us', 'business', 'science', 'health'].includes(feedTopic) && !scores[feedTopic])) return feedTopic;
+  const order = ['uk', 'us', 'business', 'health', 'science', 'environment', 'tech', 'world'];
   const best = order.reduce((a, b) => (scores[b] > scores[a] ? b : a));
   return scores[best] >= 2 ? best : null; // general feeds need real evidence of a topic
 }
@@ -214,15 +220,16 @@ function toStory(c, sourcesById, now) {
   const bySource = new Map();
   for (const it of c.items.sort((a, b) => a.published - b.published)) if (!bySource.has(it.source)) bySource.set(it.source, it);
   const articles = [...bySource.values()];
-  const topicVotes = {};
-  for (const a of articles) topicVotes[a.topic] = (topicVotes[a.topic] ?? 0) + 1;
-  const topic = Object.entries(topicVotes).sort((a, b) => b[1] - a[1])[0][0];
-
   // Headline: the article closest to the cluster centre, preferring centre-rated outlets.
   const lead = [...articles].sort((a, b) => {
     const s = (x) => cosine(x.vec, c.centroid) + (sourcesById[x.source].lean === 0 ? 0.08 : 0) + (x.summary ? 0.02 : 0) - (/[:?]/.test(x.title) ? 0.05 : 0);
     return s(b) - s(a);
   })[0];
+
+  // Topic: the one most of its articles were filed under; a tie goes to the headline article's.
+  const topicVotes = {};
+  for (const a of articles) topicVotes[a.topic] = (topicVotes[a.topic] ?? 0) + 1 + (a === lead ? 0.5 : 0);
+  const topic = Object.entries(topicVotes).sort((a, b) => b[1] - a[1])[0][0];
 
   const lean = { left: 0, centre: 0, right: 0, unrated: 0 };
   for (const a of articles) {

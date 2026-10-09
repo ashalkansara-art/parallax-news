@@ -7,27 +7,39 @@
       { "url": "https://feeds.bbci.co.uk/news/science_and_environment/rss.xml", "topic": "environment" },
       { "url": "https://feeds.bbci.co.uk/news/technology/rss.xml", "topic": "tech" },
       { "url": "https://feeds.bbci.co.uk/sport/formula1/rss.xml", "topic": "f1" },
-      { "url": "https://feeds.bbci.co.uk/sport/football/rss.xml", "topic": "football" } ] },
+      { "url": "https://feeds.bbci.co.uk/sport/football/rss.xml", "topic": "football" },
+      { "url": "https://feeds.bbci.co.uk/news/business/rss.xml", "topic": "business" },
+      { "url": "https://feeds.bbci.co.uk/news/health/rss.xml", "topic": "health" },
+      { "url": "https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml", "topic": null } ] },
     { "id": "guardian", "name": "The Guardian", "lean": -1, "factuality": "High", "owner": "Scott Trust", "feeds": [
       { "url": "https://www.theguardian.com/world/rss", "topic": "world" },
       { "url": "https://www.theguardian.com/politics/rss", "topic": "uk" },
       { "url": "https://www.theguardian.com/environment/rss", "topic": "environment" },
       { "url": "https://www.theguardian.com/technology/rss", "topic": "tech" },
       { "url": "https://www.theguardian.com/sport/formulaone/rss", "topic": "f1" },
-      { "url": "https://www.theguardian.com/football/rss", "topic": "football" } ] },
+      { "url": "https://www.theguardian.com/football/rss", "topic": "football" },
+      { "url": "https://www.theguardian.com/business/rss", "topic": "business" },
+      { "url": "https://www.theguardian.com/science/rss", "topic": "science" },
+      { "url": "https://www.theguardian.com/society/health/rss", "topic": "health" },
+      { "url": "https://www.theguardian.com/us-news/us-politics/rss", "topic": "us" } ] },
     { "id": "independent", "name": "The Independent", "lean": -1, "factuality": "Mostly high", "owner": "Independent Digital News & Media", "feeds": [
       { "url": "https://www.independent.co.uk/news/world/rss", "topic": "world" },
       { "url": "https://www.independent.co.uk/news/uk/politics/rss", "topic": "uk" },
       { "url": "https://www.independent.co.uk/climate-change/rss", "topic": "environment" },
       { "url": "https://www.independent.co.uk/tech/rss", "topic": "tech" },
-      { "url": "https://www.independent.co.uk/sport/football/rss", "topic": "football" } ] },
+      { "url": "https://www.independent.co.uk/sport/football/rss", "topic": "football" },
+      { "url": "https://www.independent.co.uk/news/business/rss", "topic": "business" },
+      { "url": "https://www.independent.co.uk/news/health/rss", "topic": "health" },
+      { "url": "https://www.independent.co.uk/news/world/americas/us-politics/rss", "topic": "us" } ] },
     { "id": "inews", "name": "The i Paper", "lean": 0, "factuality": "High", "owner": "Daily Mail and General Trust", "feeds": [
       { "url": "https://inews.co.uk/category/news/politics/feed", "topic": "uk" },
       { "url": "https://inews.co.uk/category/news/world/feed", "topic": "world" } ] },
     { "id": "sky", "name": "Sky News", "lean": 0, "factuality": "High", "owner": "Comcast", "feeds": [
       { "url": "https://feeds.skynews.com/feeds/rss/world.xml", "topic": "world" },
       { "url": "https://feeds.skynews.com/feeds/rss/politics.xml", "topic": "uk" },
-      { "url": "https://feeds.skynews.com/feeds/rss/technology.xml", "topic": "tech" } ] },
+      { "url": "https://feeds.skynews.com/feeds/rss/technology.xml", "topic": "tech" },
+      { "url": "https://feeds.skynews.com/feeds/rss/business.xml", "topic": "business" },
+      { "url": "https://feeds.skynews.com/feeds/rss/us.xml", "topic": null } ] },
     { "id": "telegraph", "name": "The Telegraph", "lean": 1, "factuality": "Mostly high", "owner": "Telegraph Media Group", "feeds": [
       { "url": "https://www.telegraph.co.uk/politics/rss.xml", "topic": "uk" },
       { "url": "https://www.telegraph.co.uk/rss.xml", "topic": null } ] },
@@ -43,11 +55,13 @@
       { "url": "https://www.ft.com/world?format=rss", "topic": "world" },
       { "url": "https://www.ft.com/world/uk?format=rss", "topic": "uk" },
       { "url": "https://www.ft.com/technology?format=rss", "topic": "tech" },
-      { "url": "https://www.ft.com/climate-capital?format=rss", "topic": "environment" } ] },
+      { "url": "https://www.ft.com/climate-capital?format=rss", "topic": "environment" },
+      { "url": "https://www.ft.com/companies?format=rss", "topic": "business" } ] },
     { "id": "economist", "name": "The Economist", "lean": 0, "factuality": "Very high", "owner": "The Economist Group", "feeds": [
       { "url": "https://www.economist.com/international/rss.xml", "topic": "world" },
       { "url": "https://www.economist.com/britain/rss.xml", "topic": "uk" },
-      { "url": "https://www.economist.com/science-and-technology/rss.xml", "topic": "tech" } ] },
+      { "url": "https://www.economist.com/science-and-technology/rss.xml", "topic": "tech" },
+      { "url": "https://www.economist.com/finance-and-economics/rss.xml", "topic": "business" } ] },
     { "id": "politico", "name": "Politico Europe", "lean": 0, "factuality": "High", "owner": "Axel Springer", "feeds": [
       { "url": "https://www.politico.eu/feed/", "topic": null } ] },
     { "id": "aljazeera", "name": "Al Jazeera", "lean": -1, "factuality": "Mixed", "owner": "State-funded (Qatar)", "feeds": [
@@ -59,17 +73,25 @@
     { "id": "npr", "name": "NPR", "lean": -1, "factuality": "High", "owner": "Non-profit (US)", "feeds": [
       { "url": "https://feeds.npr.org/1004/rss.xml", "topic": "world" },
       { "url": "https://feeds.npr.org/1019/rss.xml", "topic": "tech" },
-      { "url": "https://feeds.npr.org/1025/rss.xml", "topic": "environment" } ] },
+      { "url": "https://feeds.npr.org/1025/rss.xml", "topic": "environment" },
+      { "url": "https://feeds.npr.org/1014/rss.xml", "topic": "us" },
+      { "url": "https://feeds.npr.org/1007/rss.xml", "topic": "science" },
+      { "url": "https://feeds.npr.org/1128/rss.xml", "topic": "health" } ] },
     { "id": "nyt", "name": "New York Times", "lean": -1, "factuality": "High", "owner": "The New York Times Company", "feeds": [
       { "url": "https://rss.nytimes.com/services/xml/rss/nyt/World.xml", "topic": "world" },
       { "url": "https://rss.nytimes.com/services/xml/rss/nyt/Climate.xml", "topic": "environment" },
-      { "url": "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml", "topic": "tech" } ] },
+      { "url": "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml", "topic": "tech" },
+      { "url": "https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml", "topic": "us" },
+      { "url": "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml", "topic": "business" },
+      { "url": "https://rss.nytimes.com/services/xml/rss/nyt/Science.xml", "topic": "science" },
+      { "url": "https://rss.nytimes.com/services/xml/rss/nyt/Health.xml", "topic": "health" } ] },
     { "id": "wsj", "name": "Wall Street Journal", "lean": 0, "factuality": "High", "owner": "News Corp", "feeds": [
       { "url": "https://feeds.a.dj.com/rss/RSSWorldNews.xml", "topic": "world" },
       { "url": "https://feeds.a.dj.com/rss/RSSWSJD.xml", "topic": "tech" } ] },
     { "id": "fox", "name": "Fox News", "lean": 2, "factuality": "Mixed", "owner": "Fox Corporation", "feeds": [
       { "url": "https://moxie.foxnews.com/google-publisher/world.xml", "topic": "world" },
-      { "url": "https://moxie.foxnews.com/google-publisher/tech.xml", "topic": "tech" } ] },
+      { "url": "https://moxie.foxnews.com/google-publisher/tech.xml", "topic": "tech" },
+      { "url": "https://moxie.foxnews.com/google-publisher/politics.xml", "topic": "us" } ] },
     { "id": "nationalreview", "name": "National Review", "lean": 2, "factuality": "Mostly high", "owner": "National Review Institute", "feeds": [
       { "url": "https://www.nationalreview.com/feed/", "topic": null } ] },
     { "id": "jacobin", "name": "Jacobin", "lean": -2, "factuality": "Mostly high", "owner": "Jacobin Foundation", "feeds": [
@@ -77,7 +99,8 @@
     { "id": "theverge", "name": "The Verge", "lean": -1, "factuality": "High", "owner": "Vox Media", "feeds": [
       { "url": "https://www.theverge.com/rss/index.xml", "topic": "tech" } ] },
     { "id": "ars", "name": "Ars Technica", "lean": -1, "factuality": "High", "owner": "Condé Nast", "feeds": [
-      { "url": "https://feeds.arstechnica.com/arstechnica/index", "topic": "tech" } ] },
+      { "url": "https://feeds.arstechnica.com/arstechnica/index", "topic": "tech" },
+      { "url": "https://feeds.arstechnica.com/arstechnica/science", "topic": "science" } ] },
     { "id": "techcrunch", "name": "TechCrunch", "lean": 0, "factuality": "High", "owner": "Yahoo", "feeds": [
       { "url": "https://techcrunch.com/feed/", "topic": "tech" } ] },
     { "id": "register", "name": "The Register", "lean": 0, "factuality": "High", "owner": "Situation Publishing", "feeds": [
@@ -110,9 +133,11 @@
     { "id": "wapo", "name": "The Washington Post", "lean": -1, "factuality": "High", "owner": "Nash Holdings (Jeff Bezos)", "feeds": [
       { "url": "https://feeds.washingtonpost.com/rss/world", "topic": "world" } ] },
     { "id": "cbs", "name": "CBS News", "lean": -1, "factuality": "High", "owner": "Paramount Skydance", "feeds": [
-      { "url": "https://www.cbsnews.com/latest/rss/world", "topic": "world" } ] },
+      { "url": "https://www.cbsnews.com/latest/rss/world", "topic": "world" },
+      { "url": "https://www.cbsnews.com/latest/rss/politics", "topic": "us" } ] },
     { "id": "abc", "name": "ABC News", "lean": -1, "factuality": "High", "owner": "Disney", "feeds": [
-      { "url": "https://abcnews.go.com/abcnews/internationalheadlines", "topic": "world" } ] },
+      { "url": "https://abcnews.go.com/abcnews/internationalheadlines", "topic": "world" },
+      { "url": "https://abcnews.go.com/abcnews/politicsheadlines", "topic": "us" } ] },
     { "id": "thehill", "name": "The Hill", "lean": 0, "factuality": "Mostly high", "owner": "Nexstar Media", "feeds": [
       { "url": "https://thehill.com/feed/", "topic": null } ] },
     { "id": "bloomberg", "name": "Bloomberg", "lean": -1, "factuality": "High", "owner": "Bloomberg LP", "feeds": [
@@ -122,7 +147,8 @@
     { "id": "nypost", "name": "New York Post", "lean": 1, "factuality": "Mixed", "owner": "News Corp", "feeds": [
       { "url": "https://nypost.com/feed/", "topic": null } ] },
     { "id": "washex", "name": "Washington Examiner", "lean": 2, "factuality": "Mixed", "owner": "Clarity Media Group", "feeds": [
-      { "url": "https://www.washingtonexaminer.com/feed", "topic": null } ] },
+      { "url": "https://www.washingtonexaminer.com/feed", "topic": null },
+      { "url": "https://www.washingtonexaminer.com/section/politics/feed", "topic": "us" } ] },
     { "id": "skysportsf1", "name": "Sky Sports F1", "lean": null, "factuality": "High", "owner": "Comcast", "feeds": [
       { "url": "https://www.skysports.com/rss/12433", "topic": "f1" } ] },
     { "id": "autosport", "name": "Autosport", "lean": null, "factuality": "High", "owner": "Motorsport Network", "feeds": [
