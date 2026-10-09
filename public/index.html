@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Parallax News</title>
+<!-- Home-screen app: icon, name and full-screen launch on iPhone and Android -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Parallax">
+<meta name="theme-color" content="#eceef1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0f12" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sticky masthead + topic rail; story column with a side rail (F1 desk, blindspots, your balance) that drops below on phones. */
+:root {
+  --bg: #eceef1; --surface: #ffffff; --raise: #f6f7f9; --ink: #14171c; --muted: #5a616c; --line: #d6dae0;
+  --left: #17807f; --centre: #8e96a1; --right: #7b52c4; --unrated: #c4c9d0;
+  --signal: #b77a00; --signal-bg: #fff4d6; --danger: #b3261e;
+  --display: "Newsreader", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0d0f12; --surface: #16191e; --raise: #1d2127; --ink: #e8eaed; --muted: #9aa2ad; --line: #2a2f37;
+  --left: #3db3ae; --centre: #7c8591; --right: #a385e2; --unrated: #454c56;
+  --signal: #f0b429; --signal-bg: #3a2c08; --danger: #f28b82; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0d0f12; --surface: #16191e; --raise: #1d2127; --ink: #e8eaed; --muted: #9aa2ad; --line: #2a2f37;
+  --left: #3db3ae; --centre: #7c8591; --right: #a385e2; --unrated: #454c56;
+  --signal: #f0b429; --signal-bg: #3a2c08; --danger: #f28b82; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { margin: 0 }
+[hidden] { display: none !important }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5; }
+a { color: inherit }
+button, input, select, textarea { font: inherit; color: inherit }
+button { cursor: pointer }
+:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 16px }
+
+/* Masthead */
+.mast { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line) }
+.mast-row { display: flex; align-items: center; gap: 16px; padding-block: 12px; flex-wrap: wrap }
+.brand { display: flex; align-items: baseline; gap: 10px; margin-right: auto }
+.brand h1 { font-family: var(--display); font-weight: 600; font-size: 28px; letter-spacing: -0.01em; margin: 0; line-height: 1 }
+.brand .scale { display: inline-flex; gap: 2px; transform: translateY(-3px) }
+.brand .scale i { width: 14px; height: 4px; border-radius: 2px; display: block }
+.stamp { font-family: var(--mono); font-size: 12px; color: var(--muted) }
+.search { flex: 1 1 220px; max-width: 320px; min-width: 0 }
+.search input { width: 100%; padding: 8px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface) }
+.iconbtn { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 7px 14px; font-size: 13px; font-weight: 500 }
+.tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; padding-bottom: 0 }
+.tabs::-webkit-scrollbar { display: none }
+.tab { border: 0; background: none; padding: 10px 12px; font-weight: 500; color: var(--muted); border-bottom: 2px solid transparent; white-space: nowrap; font-size: 14px }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ink) }
+.tab .n { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-left: 4px }
+
+/* Toolbar */
+.bar { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; padding-block: 16px 4px }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--surface) }
+.seg button { border: 0; background: none; padding: 6px 12px; font-size: 13px; font-family: var(--mono) }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg) }
+.lbl { font-size: 12px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase }
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 12px; font-size: 13px }
+.chip[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--bg) }
+.shield { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--signal); background: var(--signal-bg); color: var(--ink); border-radius: 999px; padding: 6px 12px; font-size: 13px; font-weight: 500 }
+.shield[aria-pressed="false"] { background: var(--surface); border-color: var(--line); color: var(--muted) }
+.shield .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--signal) }
+.shield[aria-pressed="false"] .dot { background: var(--unrated) }
+
+.banner { margin-top: 16px; padding: 12px 14px; border-radius: var(--r); background: var(--signal-bg); border: 1px solid var(--signal); font-size: 14px }
+.banner b { font-weight: 600 }
+
+/* Grid */
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 24px; padding-block: 16px 48px; align-items: start }
+@media (max-width: 900px) { .grid { grid-template-columns: minmax(0, 1fr) } }
+.col { display: flex; flex-direction: column; gap: 14px; min-width: 0 }
+.rail { display: flex; flex-direction: column; gap: 16px; min-width: 0 }
+@media (min-width: 901px) { .rail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 112px) } }
+
+/* Briefing */
+.brief { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px 18px }
+.brief h2, .panel h2 { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; font-weight: 600 }
+.brief ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; counter-reset: b }
+.brief li { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 8px; align-items: baseline; counter-increment: b }
+.brief li::before { content: counter(b); font-family: var(--mono); font-size: 13px; color: var(--muted) }
+.brief a { font-family: var(--display); font-size: 18px; line-height: 1.25; text-decoration: none; font-weight: 500 }
+.brief a:hover { text-decoration: underline }
+.brief .mini { width: 56px }
+
+/* Story card */
+.story { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px 18px; display: grid; gap: 10px }
+.story.lead { padding: 22px 22px 18px }
+.meta { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; font-size: 12px; color: var(--muted) }
+.topic { font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink) }
+.mono { font-family: var(--mono) }
+.new { color: var(--signal); font-weight: 600 }
+.blind { background: var(--ink); color: var(--bg); padding: 2px 8px; border-radius: 4px; font-weight: 500; font-size: 11px; letter-spacing: 0.03em }
+.story h3 { font-family: var(--display); font-weight: 600; font-size: 22px; line-height: 1.2; margin: 0; text-wrap: balance }
+.story.lead h3 { font-size: 30px }
+.story h3 a { text-decoration: none }
+.story h3 a:hover { text-decoration: underline; text-underline-offset: 3px }
+.story p.sum { margin: 0; color: var(--muted); max-width: 65ch }
+.lean { display: grid; gap: 6px }
+.lean-bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--raise); gap: 2px }
+.lean-bar span { display: block; height: 100% }
+.lean-legend { display: flex; gap: 14px; font-size: 12px; color: var(--muted); font-family: var(--mono); flex-wrap: wrap }
+.lean-legend b { font-weight: 500; color: var(--ink) }
+.sw { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 5px; vertical-align: 0 }
+.outlets { display: flex; flex-wrap: wrap; gap: 6px }
+.out { font-size: 12px; padding: 2px 8px; border-radius: 4px; background: var(--raise); border-left: 3px solid var(--unrated) }
+.actions { display: flex; gap: 8px; flex-wrap: wrap }
+.act { border: 1px solid var(--line); background: none; border-radius: 6px; padding: 5px 10px; font-size: 13px }
+.act[aria-pressed="true"], .act[aria-expanded="true"] { background: var(--raise); border-color: var(--ink) }
+.compare { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; border-top: 1px solid var(--line); padding-top: 12px }
+@media (max-width: 640px) { .compare { grid-template-columns: minmax(0, 1fr) } }
+.compare h4 { margin: 0 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em }
+.compare ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px }
+.compare li { font-size: 14px; line-height: 1.35 }
+.compare li small { display: block; color: var(--muted); font-size: 12px; margin-bottom: 2px }
+.compare .empty { color: var(--muted); font-size: 13px; font-style: italic }
+
+.hidden-note { border: 1px dashed var(--signal); border-radius: var(--r); padding: 12px 16px; font-size: 14px; display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; background: var(--surface) }
+.empty-state { padding: 32px 18px; text-align: center; color: var(--muted); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r) }
+
+/* Rail panels */
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px }
+.race-name { font-family: var(--display); font-size: 22px; font-weight: 600; line-height: 1.15; margin: 0 }
+.count { font-family: var(--mono); font-size: 26px; font-variant-numeric: tabular-nums; margin: 6px 0 2px }
+.sessions { list-style: none; margin: 10px 0; padding: 0; display: grid; gap: 4px; font-size: 13px }
+.sessions li { display: flex; justify-content: space-between; gap: 8px; font-variant-numeric: tabular-nums }
+.sessions li.past { color: var(--muted); text-decoration: line-through }
+.status { font-size: 13px; padding: 8px 10px; border-radius: 6px; background: var(--raise); margin: 8px 0 }
+.status.on { background: var(--signal-bg); border: 1px solid var(--signal) }
+.btn { border: 1px solid var(--ink); background: var(--ink); color: var(--bg); border-radius: 6px; padding: 7px 12px; font-size: 13px; font-weight: 500 }
+.btn.ghost { background: none; color: var(--ink); border-color: var(--line) }
+.list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 14px }
+.list a { text-decoration: none; line-height: 1.3 }
+.list a:hover { text-decoration: underline }
+.list small { display: block; color: var(--muted); font-size: 12px }
+.balance-note { font-size: 13px; color: var(--muted); margin: 8px 0 0 }
+
+/* Settings sheet */
+dialog { border: 1px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--ink); padding: 0; width: min(720px, calc(100vw - 32px)); max-height: calc(100vh - 48px) }
+dialog::backdrop { background: rgb(0 0 0 / 0.45) }
+.sheet { padding: 20px; display: grid; gap: 20px }
+.sheet header { display: flex; justify-content: space-between; align-items: center }
+.sheet h2 { font-family: var(--display); margin: 0; font-size: 24px }
+.sheet h3 { margin: 0 0 6px; font-size: 14px }
+.sheet p { margin: 0 0 8px; color: var(--muted); font-size: 13px }
+.sheet textarea { width: 100%; min-height: 64px; border: 1px solid var(--line); border-radius: 8px; padding: 8px; background: var(--raise) }
+.sheet select { border: 1px solid var(--line); border-radius: 6px; padding: 6px; background: var(--raise) }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px }
+table { border-collapse: collapse; width: 100%; font-size: 13px }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); white-space: nowrap }
+th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--raise) }
+@media (prefers-reduced-motion: no-preference) { .story { transition: border-color .15s } .story:hover { border-color: var(--muted) } }
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="mast-row">
+      <div class="brand">
+        <h1>Parallax</h1>
+        <span class="scale" aria-hidden="true"><i style="background:var(--left)"></i><i style="background:var(--centre)"></i><i style="background:var(--right)"></i></span>
+        <span class="stamp" id="stamp"></span>
+      </div>
+      <div class="search"><input id="q" type="search" placeholder="Search stories" aria-label="Search stories"></div>
+      <button class="iconbtn" id="openSettings" type="button">Settings</button>
+    </div>
+    <nav class="tabs" role="tablist" id="tabs"></nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="banner"></div>
+  <div class="bar">
+    <span class="lbl" id="sizeLbl">Covered by at least</span>
+    <div class="seg" id="size" role="group" aria-labelledby="sizeLbl"></div>
+    <button class="chip" id="blindOnly" type="button" aria-pressed="false">Blindspots only</button>
+    <button class="shield" id="shieldBtn" type="button" aria-pressed="true"><span class="dot"></span><span id="shieldTxt">F1 results hidden</span></button>
+  </div>
+  <div class="grid">
+    <section class="col" id="feed" aria-live="polite"></section>
+    <aside class="rail" id="rail"></aside>
+  </div>
+</main>
+
+<dialog id="settings">
+  <form method="dialog" class="sheet" id="settingsForm">
+    <header><h2>Settings</h2><button class="btn ghost" value="close" type="submit">Done</button></header>
+    <section>
+      <h3>F1 spoiler shield</h3>
+      <p>From the first competitive session of a race weekend, F1 headlines that could give away a result are hidden. They come back once you mark the race as watched, or after this delay.</p>
+      <label for="liftSel">Show results again</label>
+      <select id="liftSel">
+        <option value="12">12 hours after lights out</option>
+        <option value="24">24 hours after lights out</option>
+        <option value="36">36 hours after lights out</option>
+        <option value="48">48 hours after lights out</option>
+        <option value="0">Only when I mark the race watched</option>
+      </select>
+    </section>
+    <section>
+      <h3>Muted words</h3>
+      <p>Stories whose headlines contain any of these words are hidden. One per line or comma separated.</p>
+      <textarea id="mutes" placeholder="e.g. royal, transfer"></textarea>
+    </section>
+    <section>
+      <h3>Outlets</h3>
+      <p>Lean ratings are an approximate consensus of AllSides, Ad Fontes Media and Media Bias/Fact Check. Untick an outlet to leave it out of every story.</p>
+      <div class="tablewrap"><table><thead><tr><th>Show</th><th>Outlet</th><th>Lean</th><th>Factuality</th><th>Owner</th></tr></thead><tbody id="srcRows"></tbody></table></div>
+    </section>
+    <section>
+      <h3>Reading history</h3>
+      <p>Your reading balance, saved stories and hidden stories live only in this browser.</p>
+      <button class="btn ghost" type="button" id="resetHistory">Clear reading balance</button>
+    </section>
+  </form>
+</dialog>
+
+<script>
+(() => {
+  'use strict';
+  const TOPICS = [
+    { id: 'top', label: 'Top stories' },
+    { id: 'world', label: 'World' },
+    { id: 'uk', label: 'UK politics' },
+    { id: 'environment', label: 'Environment' },
+    { id: 'tech', label: 'Technology' },
+    { id: 'f1', label: 'F1' },
+    { id: 'saved', label: 'Saved' },
+  ];
+  const TOPIC_LABEL = { world: 'World', uk: 'UK politics', environment: 'Environment', tech: 'Technology', f1: 'Formula 1' };
+  const LEAN_NAME = { '-2': 'Left', '-1': 'Lean left', '0': 'Centre', '1': 'Lean right', '2': 'Right' };
+  const leanGroup = (l) => (l == null ? 'unrated' : l < 0 ? 'left' : l > 0 ? 'right' : 'centre');
+  const F1_RE = /\b(f1|formula (1|one)|grand prix)\b/i;
+
+  // ---------- per-browser state ----------
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem('parallax.' + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+    set(k, v) { try { localStorage.setItem('parallax.' + k, JSON.stringify(v)); } catch {} },
+  };
+  const state = {
+    tab: store.get('tab', 'top'),
+    minOutlets: store.get('minOutlets', 3),
+    blindOnly: false,
+    shield: store.get('shield', true),
+    liftHours: store.get('liftHours', 36),
+    watched: store.get('watched', {}),
+    revealed: new Set(),
+    mutes: store.get('mutes', []),
+    disabled: new Set(store.get('disabled', [])),
+    saved: new Set(store.get('saved', [])),
+    dismissed: new Set(store.get('dismissed', [])),
+    reads: store.get('reads', []),
+    lastVisit: store.get('lastVisit', null),
+    open: new Set(),
+    q: '',
+  };
+  const loc = location.hash.slice(1);
+  if (TOPICS.some((t) => t.id === loc)) state.tab = loc;
+
+  let data = null;
+  const $ = (s) => document.querySelector(s);
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const ago = (iso) => {
+    const m = Math.max(0, (Date.now() - new Date(iso)) / 60000);
+    if (m < 60) return `${Math.round(m)}m ago`;
+    if (m < 60 * 36) return `${Math.round(m / 60)}h ago`;
+    return `${Math.round(m / 1440)}d ago`;
+  };
+  const fmtTime = (iso) => new Date(iso).toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' });
+
+  // ---------- F1 spoiler shield ----------
+  function raceWindows() {
+    if (!data) return [];
+    return data.f1.calendar.map((r) => {
+      const starts = r.sessions.map((s) => +new Date(s.start));
+      const race = r.sessions.find((s) => s.name === 'Race');
+      const raceStart = +new Date(race.start);
+      const start = Math.min(...starts);
+      const watched = state.watched[r.id];
+      const end = watched ? +new Date(watched) : state.liftHours > 0 ? raceStart + state.liftHours * 3.6e6 : Infinity;
+      return { ...r, start, raceStart, end, watched: Boolean(watched) };
+    });
+  }
+  const activeWindows = () => raceWindows().filter((w) => Date.now() >= w.start && Date.now() < w.end);
+  let spoilerRe = null;
+  function isSpoiler(article, windows) {
+    if (!state.shield) return null;
+    const t = +new Date(article.published);
+    const text = `${article.title} ${article.summary || ''}`;
+    for (const w of windows) {
+      if (t < w.start) continue;
+      const mentions = w.keywords.some((k) => text.toLowerCase().includes(k));
+      if (mentions || spoilerRe.test(text)) return w;
+    }
+    return null;
+  }
+  const isF1Story = (s) => s.topic === 'f1' || s.articles.some((a) => F1_RE.test(a.title));
+
+  // Splits a story's articles into safe and hidden ones under the current shield.
+  function shielded(story) {
+    if (!isF1Story(story) || state.revealed.has(story.id)) return { story, hidden: 0, race: null };
+    const windows = activeWindows();
+    if (!windows.length || !state.shield) return { story, hidden: 0, race: null };
+    let race = null;
+    const safe = story.articles.filter((a) => { const w = isSpoiler(a, windows); if (w) race = w; return !w; });
+    if (safe.length === story.articles.length) return { story, hidden: 0, race: null };
+    if (!safe.length) return { story: null, hidden: story.articles.length, race, id: story.id };
+    return { story: { ...story, articles: safe, title: safe[0].title, summary: safe[0].summary }, hidden: story.articles.length - safe.length, race };
+  }
+
+  // ---------- filtering ----------
+  function visibleArticles(s) { return s.articles.filter((a) => !state.disabled.has(a.source)); }
+  function recount(s) {
+    const articles = visibleArticles(s);
+    const lean = { left: 0, centre: 0, right: 0, unrated: 0 };
+    for (const a of articles) lean[leanGroup(data.sources[a.source]?.lean)]++;
+    return { ...s, articles, lean };
+  }
+  function matchesMute(s) {
+    if (!state.mutes.length) return false;
+    const t = s.articles.map((a) => a.title).join(' ').toLowerCase();
+    return state.mutes.some((m) => m && t.includes(m));
+  }
+  function storiesFor(tab) {
+    let list = data.stories.map(recount).filter((s) => s.articles.length && !matchesMute(s));
+    if (tab === 'saved') return list.filter((s) => state.saved.has(s.id));
+    list = list.filter((s) => !state.dismissed.has(s.id));
+    if (tab === 'f1') return list.filter(isF1Story).sort((a, b) => new Date(b.updated) - new Date(a.updated));
+    list = list.filter((s) => !isF1Story(s) && s.articles.length >= state.minOutlets);
+    if (tab !== 'top') list = list.filter((s) => s.topic === tab);
+    if (state.blindOnly) list = list.filter((s) => s.blindspot);
+    if (state.q) { const q = state.q.toLowerCase(); list = list.filter((s) => s.articles.some((a) => a.title.toLowerCase().includes(q) || (a.summary || '').toLowerCase().includes(q))); }
+    return list;
+  }
+
+  // ---------- rendering ----------
+  function leanBar(lean, compact) {
+    const total = lean.left + lean.centre + lean.right + lean.unrated || 1;
+    const seg = (k) => lean[k] ? `<span style="width:${(lean[k] / total) * 100}%;background:var(--${k})" title="${k}: ${lean[k]}"></span>` : '';
+    const bar = `<div class="lean-bar" role="img" aria-label="Coverage: ${lean.left} left, ${lean.centre} centre, ${lean.right} right">${seg('left')}${seg('centre')}${seg('right')}${seg('unrated')}</div>`;
+    if (compact) return bar;
+    const rated = lean.left + lean.centre + lean.right;
+    const pct = (n) => (rated ? Math.round((n / rated) * 100) : 0);
+    const legend = rated
+      ? `<div class="lean-legend"><span><i class="sw" style="background:var(--left)"></i>Left <b>${pct(lean.left)}%</b></span><span><i class="sw" style="background:var(--centre)"></i>Centre <b>${pct(lean.centre)}%</b></span><span><i class="sw" style="background:var(--right)"></i>Right <b>${pct(lean.right)}%</b></span></div>`
+      : `<div class="lean-legend"><span>Specialist outlets (no political rating)</span></div>`;
+    return `<div class="lean">${bar}${legend}</div>`;
+  }
+
+  function storyCard(s, i, hiddenCount) {
+    const lead = i === 0 && state.tab !== 'f1' && state.tab !== 'saved';
+    const isNew = state.lastVisit && new Date(s.first) > new Date(state.lastVisit);
+    const blind = s.blindspot ? `<span class="blind">Blindspot: little ${s.blindspot === 'left' ? 'left-leaning' : 'right-leaning'} coverage</span>` : '';
+    const outlets = s.articles.map((a) => {
+      const src = data.sources[a.source];
+      return `<span class="out" style="border-left-color:var(--${leanGroup(src?.lean)})">${esc(src?.name || a.source)}</span>`;
+    }).join('');
+    const open = state.open.has(s.id);
+    const first = s.articles[0];
+    return `<article class="story${lead ? ' lead' : ''}" data-id="${s.id}">
+      <div class="meta">
+        <span class="topic">${TOPIC_LABEL[s.topic] || s.topic}</span>
+        <span class="mono">${s.articles.length} outlet${s.articles.length === 1 ? '' : 's'}</span>
+        <span>Updated ${ago(s.updated)}</span>
+        ${isNew ? '<span class="new">New since your last visit</span>' : ''}
+        ${blind}
+      </div>
+      <h3><a href="${esc(first.link)}" target="_blank" rel="noopener" data-read="${esc(first.source)}">${esc(s.title)}</a></h3>
+      ${s.summary ? `<p class="sum">${esc(s.summary)}</p>` : ''}
+      ${s.topic === 'f1' ? '' : leanBar(s.lean)}
+      <div class="outlets">${outlets}</div>
+      ${hiddenCount ? `<div class="meta">${hiddenCount} report${hiddenCount === 1 ? '' : 's'} hidden by the spoiler shield</div>` : ''}
+      <div class="actions">
+        <button class="act" type="button" data-act="compare" aria-expanded="${open}">Compare coverage</button>
+        <button class="act" type="button" data-act="save" aria-pressed="${state.saved.has(s.id)}">${state.saved.has(s.id) ? 'Saved' : 'Save'}</button>
+        ${state.tab !== 'saved' ? '<button class="act" type="button" data-act="dismiss">Not interested</button>' : ''}
+      </div>
+      ${open ? compare(s) : ''}
+    </article>`;
+  }
+
+  function compare(s) {
+    const groups = { left: [], centre: [], right: [] };
+    for (const a of s.articles) {
+      const g = leanGroup(data.sources[a.source]?.lean);
+      (groups[g] || groups.centre).push(a);
+    }
+    const col = (k, label) => `<div><h4 style="color:var(--${k})">${label}</h4>${groups[k].length ? `<ul>${groups[k].map((a) => {
+      const src = data.sources[a.source];
+      return `<li><small>${esc(src?.name)} · ${esc(LEAN_NAME[src?.lean] ?? 'Specialist')} · ${ago(a.published)}</small><a href="${esc(a.link)}" target="_blank" rel="noopener" data-read="${esc(a.source)}">${esc(a.title)}</a></li>`;
+    }).join('')}</ul>` : '<p class="empty">No coverage from this side</p>'}</div>`;
+    if (s.topic === 'f1') return `<div class="compare" style="grid-template-columns:minmax(0,1fr)"><div><h4>All coverage</h4><ul>${s.articles.map((a) => `<li><small>${esc(data.sources[a.source]?.name)} · ${ago(a.published)}</small><a href="${esc(a.link)}" target="_blank" rel="noopener">${esc(a.title)}</a></li>`).join('')}</ul></div></div>`;
+    return `<div class="compare">${col('left', 'Left')}${col('centre', 'Centre')}${col('right', 'Right')}</div>`;
+  }
+
+  function briefing(list) {
+    const top = list.slice(0, 5);
+    if (top.length < 3) return '';
+    return `<section class="brief" aria-label="Briefing"><h2>Briefing · the ${top.length} biggest stories right now</h2><ol>${top.map((s) => `<li><a href="#s-${s.id}" data-jump="${s.id}">${esc(s.title)}</a><span class="mini">${leanBar(s.lean, true)}</span></li>`).join('')}</ol></section>`;
+  }
+
+  function renderFeed() {
+    const feed = $('#feed');
+    let list = storiesFor(state.tab);
+    const hiddenRaces = new Map();
+    const out = [];
+    if (state.tab === 'top' && !state.q && !state.blindOnly) out.push(briefing(list));
+    let shown = 0;
+    for (const s of list) {
+      const r = shielded(s);
+      if (!r.story) { const key = r.race.id; hiddenRaces.set(key, { race: r.race, n: (hiddenRaces.get(key)?.n || 0) + 1, ids: [...(hiddenRaces.get(key)?.ids || []), r.id] }); continue; }
+      out.push(storyCard(r.story, shown++, r.hidden).replace('<article ', `<article id="s-${s.id}" `));
+    }
+    for (const { race, n, ids } of hiddenRaces.values()) {
+      out.unshift(`<div class="hidden-note"><span><b>${n} F1 stor${n === 1 ? 'y' : 'ies'} hidden</b> until you've watched the ${esc(race.name)}.</span><span class="actions"><button class="btn" type="button" data-watched="${race.id}">I've watched it</button><button class="act" type="button" data-reveal="${ids.join(',')}">Show anyway</button></span></div>`);
+    }
+    if (!shown && !hiddenRaces.size) {
+      const msg = state.tab === 'saved' ? 'Nothing saved yet. Use Save on any story to keep it here.'
+        : state.q ? `No stories match “${esc(state.q)}”.`
+        : state.tab === 'f1' ? 'No F1 news in the last week.'
+        : `No stories are covered by ${state.minOutlets}+ outlets right now. <button class="act" type="button" data-size="2">Show smaller stories</button>`;
+      out.push(`<div class="empty-state">${msg}</div>`);
+    }
+    feed.innerHTML = out.join('');
+  }
+
+  function renderTabs() {
+    $('#tabs').innerHTML = TOPICS.map((t) => {
+      const n = t.id === 'saved' ? state.saved.size : t.id === 'top' ? null : storiesFor(t.id).length;
+      return `<button class="tab" role="tab" type="button" data-tab="${t.id}" aria-selected="${state.tab === t.id}">${t.label}${n != null ? `<span class="n">${n}</span>` : ''}</button>`;
+    }).join('');
+    const news = state.tab !== 'f1' && state.tab !== 'saved';
+    for (const sel of ['#sizeLbl', '#size', '#blindOnly']) $(sel).hidden = !news;
+  }
+
+  function renderSize() {
+    $('#size').innerHTML = [2, 3, 5, 8].map((n) => `<button type="button" data-size="${n}" aria-pressed="${state.minOutlets === n}">${n}+</button>`).join('');
+    $('#blindOnly').setAttribute('aria-pressed', state.blindOnly);
+  }
+
+  function renderShield() {
+    const windows = activeWindows();
+    const btn = $('#shieldBtn');
+    btn.setAttribute('aria-pressed', state.shield);
+    $('#shieldTxt').textContent = !state.shield ? 'Spoiler shield off' : windows.length ? `Shield on · ${windows[0].short} results hidden` : 'Spoiler shield on';
+  }
+
+  function f1Panel() {
+    const now = Date.now();
+    const wins = raceWindows();
+    const current = wins.find((w) => now < w.end && now >= w.start - 4 * 864e5) || wins.find((w) => w.raceStart > now);
+    if (!current) return '<section class="panel"><h2>F1 desk</h2><p>Season finished. See you in March.</p></section>';
+    const next = current.sessions.find((s) => +new Date(s.start) > now);
+    const shieldOn = state.shield && now >= current.start && now < current.end;
+    const until = next ? +new Date(next.start) - now : 0;
+    const d = Math.floor(until / 864e5), h = Math.floor((until % 864e5) / 3.6e6), m = Math.floor((until % 3.6e6) / 6e4);
+    const countdown = next ? `${d ? d + 'd ' : ''}${h}h ${String(m).padStart(2, '0')}m` : 'Weekend complete';
+    const status = shieldOn
+      ? `<div class="status on"><b>Shield on.</b> Results-related headlines are hidden ${current.end === Infinity ? 'until you mark this race watched' : 'until ' + fmtTime(new Date(current.end).toISOString())}.</div><button class="btn" type="button" data-watched="${current.id}">I've watched it</button>`
+      : current.watched ? `<div class="status">Marked as watched. Results are showing. <button class="act" type="button" data-unwatch="${current.id}">Undo</button></div>`
+      : now < current.start ? `<div class="status">The shield turns on at ${esc(current.sessions[0].name.toLowerCase())}, ${fmtTime(current.sessions[0].start)}. Build-up news shows until then.</div>`
+      : `<div class="status">Results are showing.</div>`;
+    const safeF1 = storiesFor('f1').map(shielded).filter((r) => r.story).slice(0, 3);
+    return `<section class="panel" aria-label="F1 desk"><h2>F1 desk · next up</h2>
+      <p class="race-name">${esc(current.name)}</p>
+      ${next ? `<div class="count">${countdown}</div><div class="stamp">until ${esc(next.name.toLowerCase())}</div>` : `<div class="stamp">${countdown}</div>`}
+      <ul class="sessions">${current.sessions.map((s) => `<li class="${+new Date(s.start) < now ? 'past' : ''}"><span>${esc(s.name)}</span><span class="mono">${fmtTime(s.start)}</span></li>`).join('')}</ul>
+      ${status}
+      ${safeF1.length ? `<h2 style="margin-top:14px">Latest from the paddock</h2><ul class="list">${safeF1.map((r) => `<li><a href="${esc(r.story.articles[0].link)}" target="_blank" rel="noopener">${esc(r.story.title)}</a><small>${r.story.articles.length} outlet${r.story.articles.length === 1 ? '' : 's'} · ${ago(r.story.updated)}</small></li>`).join('')}</ul>` : ''}
+    </section>`;
+  }
+
+  function blindPanel() {
+    const all = data.stories.map(recount).filter((s) => s.blindspot && !isF1Story(s) && !state.dismissed.has(s.id)).slice(0, 4);
+    if (!all.length) return '';
+    return `<section class="panel" aria-label="Blindspots"><h2>Blindspots</h2><p class="balance-note" style="margin:0 0 10px">Stories one side of the spectrum is barely covering.</p><ul class="list">${all.map((s) => `<li><a href="#s-${s.id}" data-jump="${s.id}" data-topic="${s.topic}">${esc(s.title)}</a><small>Missed by ${s.blindspot === 'left' ? 'left-leaning' : 'right-leaning'} outlets · ${s.articles.length} outlets</small>${leanBar(s.lean, true)}</li>`).join('')}</ul></section>`;
+  }
+
+  function balancePanel() {
+    const reads = state.reads.slice(-100);
+    const lean = { left: 0, centre: 0, right: 0, unrated: 0 };
+    for (const r of reads) lean[r] = (lean[r] || 0) + 1;
+    const rated = lean.left + lean.centre + lean.right;
+    let note = 'Open a few articles and this shows which side of the spectrum you read most.';
+    if (rated >= 5) {
+      const max = Object.entries({ left: lean.left, centre: lean.centre, right: lean.right }).sort((a, b) => b[1] - a[1])[0];
+      const share = Math.round((max[1] / rated) * 100);
+      note = share >= 60 ? `${share}% of your reading is from ${max[0]}-${max[0] === 'centre' ? 'rated' : 'leaning'} outlets. Compare coverage on your next story to see the other framing.` : 'Your reading is fairly balanced across the spectrum.';
+    }
+    return `<section class="panel" aria-label="Your reading balance"><h2>Your reading balance</h2>${leanBar(lean.left + lean.centre + lean.right ? lean : { left: 0, centre: 0, right: 0, unrated: 1 })}<p class="balance-note">${note}</p></section>`;
+  }
+
+  function renderRail() { $('#rail').innerHTML = f1Panel() + blindPanel() + balancePanel(); }
+
+  function renderBanner() {
+    const msgs = [];
+    if (data.sample) msgs.push('<b>Preview with sample stories.</b> These headlines are made up to show the layout and are not real news. Once the app runs on a server with internet access it pulls live feeds from 34 outlets every 30 minutes.');
+    const failed = (data.feeds || []).filter((f) => !f.ok).length;
+    if (!data.sample && failed) msgs.push(`${failed} of ${data.feeds.length} feeds could not be reached on the last update.`);
+    $('#banner').innerHTML = msgs.map((m) => `<div class="banner">${m}</div>`).join('');
+    $('#stamp').textContent = `Updated ${ago(data.generatedAt)}`;
+  }
+
+  function renderSettings() {
+    $('#liftSel').value = String(state.liftHours);
+    $('#mutes').value = state.mutes.join(', ');
+    $('#srcRows').innerHTML = Object.entries(data.sources).sort((a, b) => (a[1].lean ?? 9) - (b[1].lean ?? 9)).map(([id, s]) => `<tr><td><input type="checkbox" id="src-${id}" data-src="${id}" ${state.disabled.has(id) ? '' : 'checked'} aria-label="Show ${esc(s.name)}"></td><td>${esc(s.name)}</td><td><i class="sw" style="background:var(--${leanGroup(s.lean)})"></i>${esc(LEAN_NAME[s.lean] ?? 'Specialist')}</td><td>${esc(s.factuality)}</td><td>${esc(s.owner)}</td></tr>`).join('');
+  }
+
+  function render() { renderTabs(); renderSize(); renderShield(); renderBanner(); renderFeed(); renderRail(); }
+
+  // ---------- events ----------
+  document.addEventListener('click', (e) => {
+    const t = e.target.closest('[data-tab],[data-size],[data-act],[data-watched],[data-unwatch],[data-reveal],[data-jump],[data-read]');
+    if (!t) return;
+    if (t.dataset.tab) { state.tab = t.dataset.tab; store.set('tab', state.tab); history.replaceState(null, '', '#' + state.tab); render(); window.scrollTo({ top: 0 }); return; }
+    if (t.dataset.size) { state.minOutlets = +t.dataset.size; store.set('minOutlets', state.minOutlets); render(); return; }
+    if (t.dataset.watched) { state.watched[t.dataset.watched] = new Date().toISOString(); store.set('watched', state.watched); render(); return; }
+    if (t.dataset.unwatch) { delete state.watched[t.dataset.unwatch]; store.set('watched', state.watched); render(); return; }
+    if (t.dataset.reveal) { t.dataset.reveal.split(',').forEach((id) => state.revealed.add(id)); render(); return; }
+    if (t.dataset.jump) {
+      e.preventDefault();
+      let el = document.getElementById('s-' + t.dataset.jump);
+      if (!el && t.dataset.topic) { state.tab = t.dataset.topic; state.blindOnly = false; render(); el = document.getElementById('s-' + t.dataset.jump); }
+      if (!el) { state.minOutlets = 2; render(); el = document.getElementById('s-' + t.dataset.jump); }
+      el?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+      return;
+    }
+    if (t.dataset.read) { const g = leanGroup(data.sources[t.dataset.read]?.lean); state.reads.push(g); state.reads = state.reads.slice(-200); store.set('reads', state.reads); setTimeout(renderRail, 0); return; }
+    const id = t.closest('.story')?.dataset.id;
+    if (!id) return;
+    if (t.dataset.act === 'compare') { state.open.has(id) ? state.open.delete(id) : state.open.add(id); renderFeed(); }
+    if (t.dataset.act === 'save') { state.saved.has(id) ? state.saved.delete(id) : state.saved.add(id); store.set('saved', [...state.saved]); render(); }
+    if (t.dataset.act === 'dismiss') { state.dismissed.add(id); store.set('dismissed', [...state.dismissed].slice(-500)); render(); }
+  });
+  $('#blindOnly').addEventListener('click', () => { state.blindOnly = !state.blindOnly; render(); });
+  $('#shieldBtn').addEventListener('click', () => { state.shield = !state.shield; store.set('shield', state.shield); state.revealed.clear(); render(); });
+  let qTimer;
+  $('#q').addEventListener('input', (e) => { clearTimeout(qTimer); qTimer = setTimeout(() => { state.q = e.target.value.trim(); renderFeed(); }, 150); });
+  $('#openSettings').addEventListener('click', () => { renderSettings(); $('#settings').showModal(); });
+  $('#liftSel').addEventListener('change', (e) => { state.liftHours = +e.target.value; store.set('liftHours', state.liftHours); render(); });
+  $('#mutes').addEventListener('change', (e) => { state.mutes = e.target.value.split(/[,\n]/).map((s) => s.trim().toLowerCase()).filter(Boolean); store.set('mutes', state.mutes); render(); });
+  $('#srcRows').addEventListener('change', (e) => { const id = e.target.dataset.src; if (!id) return; e.target.checked ? state.disabled.delete(id) : state.disabled.add(id); store.set('disabled', [...state.disabled]); render(); });
+  $('#resetHistory').addEventListener('click', () => { state.reads = []; store.set('reads', []); renderRail(); });
+  $('#settingsForm').addEventListener('submit', () => render());
+
+  // ---------- data ----------
+  async function load() {
+    try {
+      const res = await fetch('data.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const next = await res.json();
+      const esc2 = (w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      spoilerRe = new RegExp(`\\b(${next.f1.spoilerWords.map(esc2).join('|')})\\b`, 'i');
+      data = next;
+      render();
+    } catch (err) {
+      if (!data) $('#feed').innerHTML = `<div class="empty-state">The news file could not be loaded (${esc(err.message)}). Run <span class="mono">node scripts/build.mjs</span> to create it, then reload.</div>`;
+    }
+  }
+  load();
+  setInterval(load, 10 * 60 * 1000);
+  setInterval(() => { if (data) { renderRail(); renderShield(); } }, 60 * 1000);
+  addEventListener('pagehide', () => store.set('lastVisit', new Date().toISOString()));
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') store.set('lastVisit', new Date().toISOString()); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,467 @@
+{
+ "_note": "Sample stories for previewing the layout. Not real news.",
+ "items": [
+  {
+   "source": "bbc",
+   "topic": "uk",
+   "title": "Government unveils planning bill to speed up housebuilding",
+   "summary": "Ministers say the planning and infrastructure bill will cut the time it takes to approve new homes and grid connections.",
+   "hoursAgo": 9.0
+  },
+  {
+   "source": "guardian",
+   "topic": "uk",
+   "title": "Planning bill: campaigners warn housebuilding push could weaken nature protections",
+   "summary": "Environmental groups say the planning bill lets developers pay into a fund instead of protecting habitats on site.",
+   "hoursAgo": 8.6
+  },
+  {
+   "source": "telegraph",
+   "topic": "uk",
+   "title": "Planning bill unveiled as ministers promise to take on the blockers",
+   "summary": "The government says its planning bill will override local objections to housebuilding and new infrastructure.",
+   "hoursAgo": 8.2
+  },
+  {
+   "source": "independent",
+   "topic": "uk",
+   "title": "What is in the new planning bill and will it build more homes?",
+   "summary": "The planning bill sets out faster approvals for housebuilding, new towns and infrastructure.",
+   "hoursAgo": 7.8
+  },
+  {
+   "source": "sky",
+   "topic": "uk",
+   "title": "Planning bill: Government promises faster housebuilding approvals",
+   "summary": "The planning and infrastructure bill was introduced in the Commons today.",
+   "hoursAgo": 7.4
+  },
+  {
+   "source": "spectator",
+   "topic": "uk",
+   "title": "The planning bill is the right idea, but will ministers hold their nerve on housebuilding?",
+   "summary": "Westminster has promised planning reform before.",
+   "hoursAgo": 7.0
+  },
+  {
+   "source": "ft",
+   "topic": "uk",
+   "title": "UK planning bill aims to unlock housebuilding and infrastructure investment",
+   "summary": "Developers welcomed the planning bill but warned approvals are only part of the problem.",
+   "hoursAgo": 6.6
+  },
+  {
+   "source": "inews",
+   "topic": "uk",
+   "title": "Planning bill: MPs from all parties raise concerns over housebuilding targets",
+   "summary": "Backbench MPs say the planning bill gives councils too little say.",
+   "hoursAgo": 6.2
+  },
+  {
+   "source": "telegraph",
+   "topic": "uk",
+   "title": "Opposition demands inquiry into NHS waiting list figures",
+   "summary": "Shadow ministers say NHS waiting list data published by the Department of Health was presented misleadingly.",
+   "hoursAgo": 14.0
+  },
+  {
+   "source": "gbnews",
+   "topic": "uk",
+   "title": "NHS waiting list figures: calls grow for an independent inquiry",
+   "summary": "Opposition MPs want an inquiry into how the NHS waiting list numbers were compiled.",
+   "hoursAgo": 13.6
+  },
+  {
+   "source": "spectator",
+   "topic": "uk",
+   "title": "Why the NHS waiting list figures deserve an inquiry",
+   "summary": "The waiting list numbers raise questions the government has not answered.",
+   "hoursAgo": 13.2
+  },
+  {
+   "source": "cityam",
+   "topic": "uk",
+   "title": "NHS waiting list inquiry call puts pressure on Health Secretary",
+   "summary": "Business groups say NHS waiting list delays are hurting productivity.",
+   "hoursAgo": 12.8
+  },
+  {
+   "source": "bbc",
+   "topic": "world",
+   "title": "Ceasefire talks resume in Geneva as envoys push for prisoner exchange",
+   "summary": "Negotiators met in Geneva for a third round of ceasefire talks focused on a prisoner exchange and humanitarian access.",
+   "hoursAgo": 6.0
+  },
+  {
+   "source": "guardian",
+   "topic": "world",
+   "title": "Geneva ceasefire talks resume amid warnings over humanitarian access",
+   "summary": "Aid agencies urged envoys at the Geneva ceasefire talks to secure access for convoys.",
+   "hoursAgo": 5.6
+  },
+  {
+   "source": "aljazeera",
+   "topic": "world",
+   "title": "Ceasefire talks restart in Geneva with prisoner exchange on table",
+   "summary": "Delegations returned to Geneva for ceasefire talks.",
+   "hoursAgo": 5.2
+  },
+  {
+   "source": "france24",
+   "topic": "world",
+   "title": "Geneva ceasefire talks: envoys seek prisoner exchange deal",
+   "summary": "A third round of ceasefire talks opened in Geneva.",
+   "hoursAgo": 4.8
+  },
+  {
+   "source": "dw",
+   "topic": "world",
+   "title": "Ceasefire talks in Geneva enter third round",
+   "summary": "Envoys in Geneva said ceasefire talks would focus on a prisoner exchange.",
+   "hoursAgo": 4.4
+  },
+  {
+   "source": "nyt",
+   "topic": "world",
+   "title": "Envoys Return to Geneva for Ceasefire Talks",
+   "summary": "The ceasefire talks in Geneva are the third round this year.",
+   "hoursAgo": 4.0
+  },
+  {
+   "source": "fox",
+   "topic": "world",
+   "title": "Geneva ceasefire talks resume as US envoy presses for prisoner exchange",
+   "summary": "The US envoy said a prisoner exchange could come within days of the Geneva ceasefire talks.",
+   "hoursAgo": 3.6
+  },
+  {
+   "source": "wsj",
+   "topic": "world",
+   "title": "Ceasefire Talks Resume in Geneva",
+   "summary": "Negotiators in Geneva are discussing a ceasefire and prisoner exchange.",
+   "hoursAgo": 3.2
+  },
+  {
+   "source": "telegraph",
+   "topic": "world",
+   "title": "Ceasefire talks resume in Geneva but both sides dig in",
+   "summary": "Officials at the Geneva ceasefire talks played down hopes of a breakthrough.",
+   "hoursAgo": 2.8
+  },
+  {
+   "source": "politico",
+   "topic": "world",
+   "title": "EU leaders agree new sanctions package at Brussels summit",
+   "summary": "EU leaders signed off a sanctions package targeting shipping and banks at the Brussels summit.",
+   "hoursAgo": 18.0
+  },
+  {
+   "source": "ft",
+   "topic": "world",
+   "title": "EU agrees fresh sanctions package after Brussels summit wrangling",
+   "summary": "The EU sanctions package was delayed by objections from two member states before the Brussels summit deal.",
+   "hoursAgo": 17.6
+  },
+  {
+   "source": "dw",
+   "topic": "world",
+   "title": "EU summit in Brussels approves new sanctions package",
+   "summary": "EU leaders approved the sanctions package on the second day of the Brussels summit.",
+   "hoursAgo": 17.2
+  },
+  {
+   "source": "france24",
+   "topic": "world",
+   "title": "Brussels summit: EU leaders back new sanctions package",
+   "summary": "The EU sanctions package targets shipping and banking.",
+   "hoursAgo": 16.8
+  },
+  {
+   "source": "guardian",
+   "topic": "world",
+   "title": "EU sanctions package agreed at Brussels summit after holdouts relent",
+   "summary": "The Brussels summit agreed the EU sanctions package.",
+   "hoursAgo": 16.4
+  },
+  {
+   "source": "economist",
+   "topic": "world",
+   "title": "What the EU sanctions package agreed in Brussels will and will not do",
+   "summary": "The latest EU sanctions package tightens rules on shipping.",
+   "hoursAgo": 16.0
+  },
+  {
+   "source": "guardian",
+   "topic": "environment",
+   "title": "Global coral bleaching event declared as ocean heat hits record",
+   "summary": "Scientists say the global coral bleaching event now affects reefs in every ocean basin after record ocean heat.",
+   "hoursAgo": 11.0
+  },
+  {
+   "source": "independent",
+   "topic": "environment",
+   "title": "Coral bleaching: scientists declare global event as oceans overheat",
+   "summary": "The global coral bleaching event is the largest on record.",
+   "hoursAgo": 10.6
+  },
+  {
+   "source": "insideclimate",
+   "topic": "environment",
+   "title": "Record ocean heat drives global coral bleaching event",
+   "summary": "Reef scientists say the coral bleaching event is spreading faster than expected.",
+   "hoursAgo": 10.2
+  },
+  {
+   "source": "nyt",
+   "topic": "environment",
+   "title": "Scientists Declare Global Coral Bleaching Event",
+   "summary": "Record ocean heat has triggered coral bleaching across the tropics.",
+   "hoursAgo": 9.8
+  },
+  {
+   "source": "carbonbrief",
+   "topic": "environment",
+   "title": "Global coral bleaching event: what the science says about ocean heat",
+   "summary": "Carbon Brief explains the global coral bleaching event and record ocean heat.",
+   "hoursAgo": 9.4
+  },
+  {
+   "source": "npr",
+   "topic": "environment",
+   "title": "Coral reefs worldwide hit by global bleaching event",
+   "summary": "Ocean heat records have caused coral bleaching on reefs worldwide.",
+   "hoursAgo": 9.0
+  },
+  {
+   "source": "newstatesman",
+   "topic": "environment",
+   "title": "The global coral bleaching event is a warning we keep ignoring",
+   "summary": "Coral bleaching on this scale shows how fast ocean heat is rising.",
+   "hoursAgo": 8.6
+  },
+  {
+   "source": "bbc",
+   "topic": "environment",
+   "title": "Offshore wind auction secures record capacity for UK",
+   "summary": "The offshore wind auction awarded contracts for a record amount of new capacity, the government said.",
+   "hoursAgo": 20.0
+  },
+  {
+   "source": "carbonbrief",
+   "topic": "environment",
+   "title": "Analysis: Record offshore wind auction keeps UK clean power target in reach",
+   "summary": "The offshore wind auction results suggest clean power targets are achievable.",
+   "hoursAgo": 19.6
+  },
+  {
+   "source": "guardian",
+   "topic": "environment",
+   "title": "UK offshore wind auction hits record despite rising costs",
+   "summary": "The offshore wind auction prices rose but capacity hit a record.",
+   "hoursAgo": 19.2
+  },
+  {
+   "source": "telegraph",
+   "topic": "environment",
+   "title": "Record offshore wind auction will add to energy bills, critics warn",
+   "summary": "Critics say the offshore wind auction strike prices will push up bills.",
+   "hoursAgo": 18.8
+  },
+  {
+   "source": "cityam",
+   "topic": "environment",
+   "title": "Offshore wind auction: record capacity as investors return",
+   "summary": "Investors returned to the UK offshore wind auction.",
+   "hoursAgo": 18.4
+  },
+  {
+   "source": "ft",
+   "topic": "environment",
+   "title": "UK offshore wind auction draws record capacity at higher prices",
+   "summary": "The offshore wind auction cleared at higher strike prices.",
+   "hoursAgo": 18.0
+  },
+  {
+   "source": "theverge",
+   "topic": "tech",
+   "title": "EU issues first fines under the AI Act",
+   "summary": "Regulators issued the first fines under the AI Act against companies that failed transparency rules.",
+   "hoursAgo": 8.0
+  },
+  {
+   "source": "ars",
+   "topic": "tech",
+   "title": "First AI Act fines land as EU regulators test new powers",
+   "summary": "The AI Act fines are the first enforcement action under the EU law.",
+   "hoursAgo": 7.6
+  },
+  {
+   "source": "techcrunch",
+   "topic": "tech",
+   "title": "EU hands out first AI Act fines",
+   "summary": "Companies were fined under the AI Act for failing to label AI-generated content.",
+   "hoursAgo": 7.2
+  },
+  {
+   "source": "register",
+   "topic": "tech",
+   "title": "Brussels swings AI Act hammer for first time with fines",
+   "summary": "The AI Act fines follow months of warnings from the EU AI Office.",
+   "hoursAgo": 6.8
+  },
+  {
+   "source": "ft",
+   "topic": "tech",
+   "title": "EU imposes first fines under landmark AI Act",
+   "summary": "The AI Act fines test the EU approach to regulating artificial intelligence.",
+   "hoursAgo": 6.4
+  },
+  {
+   "source": "bbc",
+   "topic": "tech",
+   "title": "AI Act: EU fines companies under new artificial intelligence law",
+   "summary": "The EU said the AI Act fines were a signal to the industry.",
+   "hoursAgo": 6.0
+  },
+  {
+   "source": "politico",
+   "topic": "tech",
+   "title": "AI Act enforcement begins with first EU fines",
+   "summary": "The EU AI Office issued its first AI Act fines.",
+   "hoursAgo": 5.6
+  },
+  {
+   "source": "sky",
+   "topic": "tech",
+   "title": "Telecoms provider confirms data breach affecting millions of customers",
+   "summary": "The telecoms company said hackers accessed customer names, addresses and account numbers in the data breach.",
+   "hoursAgo": 4.0
+  },
+  {
+   "source": "bbc",
+   "topic": "tech",
+   "title": "Telecoms data breach: what customers should do now",
+   "summary": "Customers affected by the telecoms data breach are being told to watch for scam calls.",
+   "hoursAgo": 3.6
+  },
+  {
+   "source": "register",
+   "topic": "tech",
+   "title": "Telecoms provider data breach traced to third-party supplier",
+   "summary": "The data breach at the telecoms provider began at a supplier.",
+   "hoursAgo": 3.2
+  },
+  {
+   "source": "telegraph",
+   "topic": "tech",
+   "title": "Millions of telecoms customers hit by data breach",
+   "summary": "The telecoms data breach is one of the largest in Britain this year.",
+   "hoursAgo": 2.8
+  },
+  {
+   "source": "techcrunch",
+   "topic": "tech",
+   "title": "Telecoms giant discloses data breach affecting millions",
+   "summary": "Hackers stole customer records in the telecoms data breach.",
+   "hoursAgo": 2.4
+  },
+  {
+   "source": "autosport",
+   "topic": "f1",
+   "title": "Singapore Grand Prix preview: heat and humidity set up toughest test of the year",
+   "summary": "Teams arrive at Marina Bay for the Singapore Grand Prix with upgrades aimed at the slow corners.",
+   "hoursAgo": 20.0
+  },
+  {
+   "source": "motorsport",
+   "topic": "f1",
+   "title": "Singapore GP: teams bring upgrades for Marina Bay heat",
+   "summary": "Several teams have new floors for the Singapore Grand Prix at Marina Bay.",
+   "hoursAgo": 19.6
+  },
+  {
+   "source": "therace",
+   "topic": "f1",
+   "title": "What to watch for at the Singapore Grand Prix sprint weekend",
+   "summary": "The Singapore Grand Prix hosts a sprint weekend at Marina Bay.",
+   "hoursAgo": 19.2
+  },
+  {
+   "source": "racefans",
+   "topic": "f1",
+   "title": "Singapore Grand Prix weekend schedule and what to expect at Marina Bay",
+   "summary": "The Singapore Grand Prix sprint weekend begins with sprint qualifying.",
+   "hoursAgo": 18.8
+  },
+  {
+   "source": "skysportsf1",
+   "topic": "f1",
+   "title": "Singapore GP: everything you need to know about the sprint weekend",
+   "summary": "Marina Bay hosts the Singapore Grand Prix sprint weekend.",
+   "hoursAgo": 18.4
+  },
+  {
+   "source": "bbc",
+   "topic": "f1",
+   "title": "F1 confirms 2027 calendar with 24 races",
+   "summary": "Formula 1 has confirmed its 2027 calendar with 24 grands prix.",
+   "hoursAgo": 40.0
+  },
+  {
+   "source": "autosport",
+   "topic": "f1",
+   "title": "F1 2027 calendar revealed: 24 races confirmed",
+   "summary": "The 2027 F1 calendar keeps 24 grands prix.",
+   "hoursAgo": 39.6
+  },
+  {
+   "source": "motorsport",
+   "topic": "f1",
+   "title": "2027 F1 calendar confirmed with 24 races",
+   "summary": "Formula 1 published its 2027 calendar.",
+   "hoursAgo": 39.2
+  },
+  {
+   "source": "inews",
+   "topic": "uk",
+   "title": "Council approves new cycle lane on high street",
+   "summary": "The council voted to approve the scheme.",
+   "hoursAgo": 5
+  },
+  {
+   "source": "independent",
+   "topic": "world",
+   "title": "Reality TV star celebrates engagement in Paris",
+   "summary": "The celebrity shared photos online.",
+   "hoursAgo": 3
+  },
+  {
+   "source": "bbc",
+   "topic": "world",
+   "title": "Premier League: late goal settles derby",
+   "summary": "Football report.",
+   "hoursAgo": 7
+  },
+  {
+   "source": "aljazeera",
+   "topic": null,
+   "title": "Election commission sets date for presidential vote in Kenya",
+   "summary": "The election commission said the presidential election will take place next year.",
+   "hoursAgo": 10
+  },
+  {
+   "source": "dw",
+   "topic": null,
+   "title": "Election date set for Kenya presidential vote",
+   "summary": "Kenya election commission sets presidential election date.",
+   "hoursAgo": 9
+  },
+  {
+   "source": "theverge",
+   "topic": "tech",
+   "title": "The best robot vacuum deals this week",
+   "summary": "Deals on robot vacuums.",
+   "hoursAgo": 2
+  }
+ ]
+}

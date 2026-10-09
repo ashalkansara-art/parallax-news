@@ -1,0 +1,13 @@
+{
+  "name": "parallax-news",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Personal news reader that groups the same story across outlets and shows each outlet's political lean.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "sample": "node scripts/build.mjs --fixture fixtures/sample.json",
+    "start": "node scripts/build.mjs && npx --yes serve public"
+  },
+  "engines": { "node": ">=18" }
+}

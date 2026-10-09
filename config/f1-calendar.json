@@ -1,0 +1,29 @@
+{
+  "_note": "Session start times in UTC. Approximate: check formula1.com and edit if a time moves. The spoiler shield starts at the first competitive session (sprint qualifying or qualifying).",
+  "season": 2026,
+  "races": [
+    { "id": "sgp", "name": "Singapore Grand Prix", "short": "Singapore", "keywords": ["singapore", "marina bay"], "sessions": [
+      { "name": "Sprint qualifying", "start": "2026-10-09T12:30:00Z" },
+      { "name": "Sprint", "start": "2026-10-10T09:00:00Z" },
+      { "name": "Qualifying", "start": "2026-10-10T13:00:00Z" },
+      { "name": "Race", "start": "2026-10-11T12:00:00Z" } ] },
+    { "id": "usa", "name": "United States Grand Prix", "short": "Austin", "keywords": ["united states grand prix", "us grand prix", "us gp", "austin", "cota", "circuit of the americas"], "sessions": [
+      { "name": "Qualifying", "start": "2026-10-24T21:00:00Z" },
+      { "name": "Race", "start": "2026-10-25T19:00:00Z" } ] },
+    { "id": "mex", "name": "Mexico City Grand Prix", "short": "Mexico City", "keywords": ["mexico", "mexican"], "sessions": [
+      { "name": "Qualifying", "start": "2026-10-31T21:00:00Z" },
+      { "name": "Race", "start": "2026-11-01T20:00:00Z" } ] },
+    { "id": "bra", "name": "São Paulo Grand Prix", "short": "São Paulo", "keywords": ["sao paulo", "são paulo", "brazil", "brazilian", "interlagos"], "sessions": [
+      { "name": "Qualifying", "start": "2026-11-07T18:00:00Z" },
+      { "name": "Race", "start": "2026-11-08T17:00:00Z" } ] },
+    { "id": "lvg", "name": "Las Vegas Grand Prix", "short": "Las Vegas", "keywords": ["las vegas", "vegas"], "sessions": [
+      { "name": "Qualifying", "start": "2026-11-21T06:00:00Z" },
+      { "name": "Race", "start": "2026-11-22T04:00:00Z" } ] },
+    { "id": "qat", "name": "Qatar Grand Prix", "short": "Qatar", "keywords": ["qatar", "lusail"], "sessions": [
+      { "name": "Qualifying", "start": "2026-11-28T18:00:00Z" },
+      { "name": "Race", "start": "2026-11-29T16:00:00Z" } ] },
+    { "id": "abu", "name": "Abu Dhabi Grand Prix", "short": "Abu Dhabi", "keywords": ["abu dhabi", "yas marina"], "sessions": [
+      { "name": "Qualifying", "start": "2026-12-05T14:00:00Z" },
+      { "name": "Race", "start": "2026-12-06T13:00:00Z" } ] }
+  ]
+}
