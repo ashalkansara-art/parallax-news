@@ -1,13 +1,13 @@
 # Parallax News
 
-A personal news reader in the spirit of Ground News. It reads RSS feeds from 52 outlets, groups articles about the same event into one story, and shows how much of the coverage comes from left, centre and right-leaning outlets.
+A personal news reader in the spirit of Ground News. It reads RSS feeds from 63 outlets, groups articles about the same event into one story, and shows how much of the coverage comes from left, centre and right-leaning outlets.
 
 ## What it does
 
 - **Stories, not articles.** Headlines from different outlets about the same event are clustered into one story card with a coverage bar (left / centre / right).
 - **Compare coverage.** Open any story to see each side's headlines next to each other.
 - **Blindspots.** Stories that one side of the spectrum is barely covering get a badge and their own panel.
-- **Only your topics.** World, UK politics, US politics, business, environment, science, health, technology, F1 and football. Celebrity, showbiz, royal gossip, shopping deals and other sports are filtered out (`config/filters.json`).
+- **Only your topics.** World, UK politics, US politics, India, business, environment, science, health, technology, F1 and football. Celebrity, showbiz, royal gossip, shopping deals and other sports are filtered out (`config/filters.json`).
 - **No minor stories.** The "covered by at least" control (default 3 outlets) hides stories few outlets picked up.
 - **Briefing.** The five biggest stories right now, at the top of Top stories.
 - **F1 spoiler shield.** From the first competitive session of a race weekend (sprint qualifying or qualifying), F1 headlines that could give away a result are hidden. Build-up news and non-race news (contracts, calendar) still show. Results come back when you tap "I've watched it", or automatically after a delay you choose (default 36 hours after lights out). The F1 desk shows the next race, a countdown and session times in your time zone.

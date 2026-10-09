@@ -66,7 +66,14 @@
     "box office",
     "album review",
     "film review",
-    "tv review"
+    "tv review",
+    "bollywood",
+    "bigg boss",
+    "kollywood",
+    "tollywood",
+    "box office collection",
+    "teer result",
+    "lottery sambad"
   ],
   "topics": {
     "uk": [
@@ -551,6 +558,34 @@
       "public health",
       "diagnosis",
       "world health organization"
+    ],
+    "india": [
+      "india",
+      "indian",
+      "modi",
+      "bjp",
+      "congress party",
+      "rahul gandhi",
+      "delhi",
+      "new delhi",
+      "mumbai",
+      "kolkata",
+      "bengaluru",
+      "chennai",
+      "hyderabad",
+      "kerala",
+      "tamil nadu",
+      "punjab",
+      "bihar",
+      "uttar pradesh",
+      "maharashtra",
+      "west bengal",
+      "kashmir",
+      "rupee",
+      "lok sabha",
+      "rajya sabha",
+      "aap",
+      "election commission of india"
     ]
   },
   "f1Spoiler": [

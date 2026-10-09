@@ -1,5 +1,5 @@
 {
-  "_note": "Lean: -2 Left, -1 Lean left, 0 Centre, 1 Lean right, 2 Right. Ratings are an approximate consensus of AllSides, Ad Fontes Media and Media Bias/Fact Check as of 2025. Edit freely. Topic on a feed is a hint; items are still keyword-checked. Feeds that fail are skipped.",
+  "_note": "Lean: -2 Left, -1 Lean left, 0 Centre, 1 Lean right, 2 Right. Ratings are an approximate consensus of AllSides, Ad Fontes Media and Media Bias/Fact Check as of 2025. Edit freely. Topic on a feed is a hint; items are still keyword-checked. Feeds that fail are skipped. Indian outlets are rated on India's own spectrum: left means critical of the BJP government, right means supportive.",
   "sources": [
     { "id": "bbc", "name": "BBC News", "lean": 0, "factuality": "High", "owner": "Public broadcaster (UK)", "feeds": [
       { "url": "https://feeds.bbci.co.uk/news/world/rss.xml", "topic": "world" },
@@ -10,7 +10,8 @@
       { "url": "https://feeds.bbci.co.uk/sport/football/rss.xml", "topic": "football" },
       { "url": "https://feeds.bbci.co.uk/news/business/rss.xml", "topic": "business" },
       { "url": "https://feeds.bbci.co.uk/news/health/rss.xml", "topic": "health" },
-      { "url": "https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml", "topic": null } ] },
+      { "url": "https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml", "topic": null },
+      { "url": "https://feeds.bbci.co.uk/news/world/asia/india/rss.xml", "topic": "india" } ] },
     { "id": "guardian", "name": "The Guardian", "lean": -1, "factuality": "High", "owner": "Scott Trust", "feeds": [
       { "url": "https://www.theguardian.com/world/rss", "topic": "world" },
       { "url": "https://www.theguardian.com/politics/rss", "topic": "uk" },
@@ -21,7 +22,8 @@
       { "url": "https://www.theguardian.com/business/rss", "topic": "business" },
       { "url": "https://www.theguardian.com/science/rss", "topic": "science" },
       { "url": "https://www.theguardian.com/society/health/rss", "topic": "health" },
-      { "url": "https://www.theguardian.com/us-news/us-politics/rss", "topic": "us" } ] },
+      { "url": "https://www.theguardian.com/us-news/us-politics/rss", "topic": "us" },
+      { "url": "https://www.theguardian.com/world/india/rss", "topic": "india" } ] },
     { "id": "independent", "name": "The Independent", "lean": -1, "factuality": "Mostly high", "owner": "Independent Digital News & Media", "feeds": [
       { "url": "https://www.independent.co.uk/news/world/rss", "topic": "world" },
       { "url": "https://www.independent.co.uk/news/uk/politics/rss", "topic": "uk" },
@@ -149,6 +151,28 @@
     { "id": "washex", "name": "Washington Examiner", "lean": 2, "factuality": "Mixed", "owner": "Clarity Media Group", "feeds": [
       { "url": "https://www.washingtonexaminer.com/feed", "topic": null },
       { "url": "https://www.washingtonexaminer.com/section/politics/feed", "topic": "us" } ] },
+    { "id": "thehindu", "name": "The Hindu", "lean": -1, "factuality": "High", "owner": "The Hindu Group", "feeds": [
+      { "url": "https://www.thehindu.com/news/national/feeder/default.rss", "topic": "india" } ] },
+    { "id": "indianexpress", "name": "The Indian Express", "lean": -1, "factuality": "High", "owner": "Indian Express Group", "feeds": [
+      { "url": "https://indianexpress.com/section/india/feed/", "topic": "india" } ] },
+    { "id": "ndtv", "name": "NDTV", "lean": 0, "factuality": "Mostly high", "owner": "Adani Group", "feeds": [
+      { "url": "https://feeds.feedburner.com/ndtvnews-india-news", "topic": "india" } ] },
+    { "id": "hindustantimes", "name": "Hindustan Times", "lean": 0, "factuality": "Mostly high", "owner": "HT Media (Birla family)", "feeds": [
+      { "url": "https://www.hindustantimes.com/feeds/rss/india-news/rssfeed.xml", "topic": "india" } ] },
+    { "id": "mint", "name": "Mint", "lean": 0, "factuality": "High", "owner": "HT Media (Birla family)", "feeds": [
+      { "url": "https://www.livemint.com/rss/news", "topic": "india" } ] },
+    { "id": "toi", "name": "The Times of India", "lean": 1, "factuality": "Mixed", "owner": "Bennett, Coleman & Co", "feeds": [
+      { "url": "https://timesofindia.indiatimes.com/rssfeeds/-2128936835.cms", "topic": "india" } ] },
+    { "id": "news18", "name": "News18", "lean": 1, "factuality": "Mixed", "owner": "Network18 (Reliance)", "feeds": [
+      { "url": "https://www.news18.com/commonfeeds/v1/eng/rss/india.xml", "topic": "india" } ] },
+    { "id": "firstpost", "name": "Firstpost", "lean": 1, "factuality": "Mixed", "owner": "Network18 (Reliance)", "feeds": [
+      { "url": "https://www.firstpost.com/commonfeeds/v1/mfp/rss/india.xml", "topic": "india" } ] },
+    { "id": "swarajya", "name": "Swarajya", "lean": 2, "factuality": "Mixed", "owner": "Kovai Media", "feeds": [
+      { "url": "https://swarajyamag.com/feed", "topic": "india" } ] },
+    { "id": "thequint", "name": "The Quint", "lean": -2, "factuality": "Mostly high", "owner": "Quintillion Media", "feeds": [
+      { "url": "https://www.thequint.com/stories.rss", "topic": "india" } ] },
+    { "id": "newslaundry", "name": "Newslaundry", "lean": -2, "factuality": "High", "owner": "Reader-funded", "feeds": [
+      { "url": "https://www.newslaundry.com/feed", "topic": "india" } ] },
     { "id": "skysportsf1", "name": "Sky Sports F1", "lean": null, "factuality": "High", "owner": "Comcast", "feeds": [
       { "url": "https://www.skysports.com/rss/12433", "topic": "f1" } ] },
     { "id": "autosport", "name": "Autosport", "lean": null, "factuality": "High", "owner": "Motorsport Network", "feeds": [

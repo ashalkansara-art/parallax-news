@@ -158,10 +158,11 @@ function classify(item, feedTopic, filters) {
     // World feeds carry a lot of British and American politics; move those to their own tabs.
     if (scores.uk >= 3 && scores.uk > scores.world) return 'uk';
     if (scores.us >= 3 && scores.us > scores.world) return 'us';
+    if (scores.india >= 2 && scores.india > scores.world) return 'india';
   }
   // Section feeds for the newer topics also run general stories, so they need a keyword match too.
   if (feedTopic && !(['us', 'business', 'science', 'health'].includes(feedTopic) && !scores[feedTopic])) return feedTopic;
-  const order = ['uk', 'us', 'business', 'health', 'science', 'environment', 'tech', 'world'];
+  const order = ['uk', 'us', 'india', 'business', 'health', 'science', 'environment', 'tech', 'world'];
   const best = order.reduce((a, b) => (scores[b] > scores[a] ? b : a));
   return scores[best] >= 2 ? best : null; // general feeds need real evidence of a topic
 }

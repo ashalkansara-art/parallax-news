@@ -248,6 +248,7 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--r
     { id: 'world', label: 'World' },
     { id: 'uk', label: 'UK politics' },
     { id: 'us', label: 'US politics' },
+    { id: 'india', label: 'India' },
     { id: 'business', label: 'Business' },
     { id: 'environment', label: 'Environment' },
     { id: 'science', label: 'Science' },
@@ -257,7 +258,7 @@ th { font-weight: 600; color: var(--muted); font-size: 12px; background: var(--r
     { id: 'football', label: 'Football' },
     { id: 'saved', label: 'Saved' },
   ];
-  const TOPIC_LABEL = { world: 'World', uk: 'UK politics', us: 'US politics', business: 'Business', environment: 'Environment', science: 'Science', health: 'Health', tech: 'Technology', f1: 'Formula 1', football: 'Football' };
+  const TOPIC_LABEL = { world: 'World', uk: 'UK politics', us: 'US politics', india: 'India', business: 'Business', environment: 'Environment', science: 'Science', health: 'Health', tech: 'Technology', f1: 'Formula 1', football: 'Football' };
   const LEAN_NAME = { '-2': 'Left', '-1': 'Lean left', '0': 'Centre', '1': 'Lean right', '2': 'Right' };
   const leanGroup = (l) => (l == null ? 'unrated' : l < 0 ? 'left' : l > 0 ? 'right' : 'centre');
   const F1_RE = /\b(f1|formula (1|one)|grand prix)\b/i;
